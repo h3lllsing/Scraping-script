@@ -57,7 +57,9 @@ coverage is partial but real and verified from the business's own website.
 
 | Method | Endpoint | Parameters | Notes |
 |---|---|---|---|
-| GET | `/scrape` | `query` (req), `location`, `limit` (1–50), `sources`, `phone_only`, `enrich` | Main endpoint |
+| GET | `/scrape` | `query` (req), `location`, `limit` (1–50), `sources`, `phone_only`, `enrich` | Main endpoint (JSON) |
+| GET | `/export.csv` | `query` (req), `location`, `limit`, `sources`, `phone_only`, `enrich` | Same data as CSV download |
+| GET | `/categories` | — | List of all supported business niches |
 | GET | `/` | — | Usage info (nice to expose) |
 | GET | `/health` | — | Liveness check |
 

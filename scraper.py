@@ -125,24 +125,35 @@ class BaseScraper:
 
 
 TAG_RULES = [
+    ("property management", r"(property management|property manager)", ["office=property_management"]),
     ("real estate", r"(real[\s-]?estate|realtor|property|estate agent)", ["office~estate|real_estate", "shop~real_estate"]),
     ("restaurant", r"(restaurant|dining|eat|food)", ["amenity=restaurant"]),
     ("cafe", r"(caff[eé]|coffee|coffeehouse|cafe)", ["amenity=cafe"]),
     ("hotel", r"(hotel|motel|lodging|guesthouse|inn)", ["tourism=hotel"]),
     ("dentist", r"(dentist|dental)", ["amenity=dentist"]),
     ("clinic", r"(clinic)", ["amenity=clinic"]),
+    ("hospital", r"(hospital|urgent care|medical center)", ["amenity=hospital"]),
     ("doctor", r"(doctor|physician|physiotherapy|pharmacist)", ["amenity=doctors"]),
     ("pharmacy", r"(pharmacy|drugstore|drug store|chemist)", ["amenity=pharmacy"]),
     ("gym", r"(gym|fitness)", ["leisure=fitness_centre", "leisure~gym"]),
+    ("kindergarten", r"(kindergarten|preschool|daycare|nursery school)", ["amenity=kindergarten"]),
     ("school", r"(school|college|university|academy)", ["amenity=school", "amenity=college", "amenity=university"]),
     ("bank", r"(bank|credit union)", ["amenity=bank"]),
     ("atm", r"(atm|automatic teller)", ["amenity=atm"]),
     ("fuel", r"(gas station|petrol|fuel|petrol station)", ["amenity=fuel"]),
     ("car rental", r"(car rental|rent a car|cab service|taxi)", ["amenity=car_rental", "amenity=taxi"]),
     ("car repair", r"(auto repair|mechanic|workshop|garage)", ["shop=car_repair", "shop=car"]),
+    ("car dealer", r"(car dealer|automall|auto dealer|showroom|pre-?owned cars)", ["shop=car"]),
+    ("tire shop", r"(tire|tyre|wheel alignment)", ["shop=tyres"]),
+    ("roofing", r"(roofing|roofer|roof repair)", ["craft=roofer"]),
+    ("hvac", r"(hvac|heating|air conditioning|ac repair|furnace)", ["craft=hvac"]),
+    ("locksmith", r"(locksmith|lock and key|key cutting)", ["craft=locksmith"]),
+    ("painting", r"(painting contractor|house painting|painter)", ["craft=painter"]),
     ("plumber", r"(plumber|plumbing)", ["craft=plumber"]),
     ("electrician", r"(electrician|electrical)", ["craft=electrician"]),
     ("salon", r"(salon|beauty parlor|hair salon|hairdresser|barber)", ["shop=hairdresser", "shop=beauty"]),
+    ("spa", r"(massage|spa|wellness)", ["shop=beauty", "leisure=spa"]),
+    ("landscaping", r"(landscap|lawn care|garden service|gardener)", ["shop=garden_centre", "craft=gardener"]),
     ("grocery", r"(grocery|supermarket|grocery store|mart)", ["shop=supermarket", "shop=grocery"]),
     ("bakery", r"(bakery|baker)", ["shop=bakery"]),
     ("travel", r"(travel agent|tourism office)", ["office=travel_agent"]),
@@ -154,11 +165,14 @@ TAG_RULES = [
     ("jewelry", r"(jewelry|jewellery)", ["shop=jewelry"]),
     ("footwear", r"(footwear|shoes)", ["shop=shoes"]),
     ("optometrist", r"(optometrist|optician|eyeglass|optical)", ["shop=optician"]),
+    ("florist", r"(florist|flower shop)", ["shop=florist"]),
+    ("bookstore", r"(bookstore|book shop|stationery)", ["shop=books", "shop=stationery"]),
     ("lawyer", r"(lawyer|advocate|attorney|legal)", ["office=lawyer"]),
     ("accountant", r"(accountant|accounting|bookkeeper|tax consultant)", ["office=accountant"]),
     ("insurance", r"(insurance)", ["office=insurance"]),
     ("notary", r"(notary|notary public)", ["office=notary"]),
     ("engineer", r"(engineer|engineering)", ["office=engineer"]),
+    ("financial advisor", r"(financial advisor|financial planner|wealth management|investment advisor)", ["office=financial_advisor", "office=financial"]),
     ("it services", r"(software|information technology|it services|computer services)", ["office=it", "office=computer"]),
     ("telecom", r"(telecom|mobile shop|phone shop)", ["shop=mobile_phone"]),
     ("general contractor", r"(contractor|construction)", ["office=construction_company", "shop=construction_materials"]),
@@ -169,7 +183,12 @@ TAG_RULES = [
     ("bank branch", r"(branch)", ["amenity=bank"]),
     ("civic", r"(post office|tax office|police station|fire station)", ["amenity=post_office", "amenity=police", "amenity=fire_station"]),
     ("transport", r"(bus station|train station|airport)", ["highway=bus_stop", "railway=station", "aeroway=aerodrome"]),
+    ("bar", r"(\bbar\b|pub|nightclub|lounge)", ["amenity=bar", "amenity=pub", "amenity=nightclub"]),
+    ("place of worship", r"(church|mosque|temple|gurdwara|synagogue|cathedral)", ["amenity=place_of_worship"]),
+    ("funeral", r"(funeral|crematorium|undertaker)", ["shop=funeral_directors", "amenity=crematorium"]),
+    ("sports centre", r"(sports centre|sports center|sports club|stadium|tennis club|golf club)", ["leisure=sports_centre", "leisure=stadium", "leisure=golf_course"]),
     ("library", r"(library)", ["amenity=library"]),
+    ("parking", r"(parking garage|parking lot|car park)", ["amenity=parking"]),
     ("toilet", r"(public toilet|restroom|washroom)", ["amenity=toilets"]),
     ("park", r"(park|playground|garden)", ["leisure=park", "leisure=playground", "leisure=garden"]),
 ]
@@ -337,40 +356,60 @@ class OSMScraper(BaseScraper):
 
 
 PHOTON_TAG_MAP = {
+    "property management": ("office", "property_management"),
     "real estate": ("office", "estate_agent"),
     "restaurant": ("amenity", "restaurant"),
     "cafe": ("amenity", "cafe"),
     "hotel": ("tourism", "hotel"),
     "dentist": ("amenity", "dentist"),
     "clinic": ("amenity", "clinic"),
+    "hospital": ("amenity", "hospital"),
     "doctor": ("amenity", "doctors"),
     "pharmacy": ("amenity", "pharmacy"),
     "gym": ("leisure", "fitness_centre"),
+    "kindergarten": ("amenity", "kindergarten"),
     "school": ("amenity", "school"),
     "bank": ("amenity", "bank"),
     "atm": ("amenity", "atm"),
     "fuel": ("amenity", "fuel"),
     "car rental": ("amenity", "car_rental"),
     "car repair": ("shop", "car_repair"),
+    "car dealer": ("shop", "car"),
+    "tire shop": ("shop", "tyres"),
+    "roofing": ("craft", "roofer"),
+    "hvac": ("craft", "hvac"),
+    "locksmith": ("craft", "locksmith"),
+    "painting": ("craft", "painter"),
     "plumber": ("craft", "plumber"),
     "electrician": ("craft", "electrician"),
     "salon": ("shop", "hairdresser"),
     "barber": ("shop", "barber"),
+    "spa": ("shop", "beauty"),
+    "landscaping": ("craft", "gardener"),
     "supermarket": ("shop", "supermarket"),
     "bakery": ("shop", "bakery"),
     "travel": ("office", "travel_agent"),
     "laundry": ("shop", "laundry"),
+    "florist": ("shop", "florist"),
+    "bookstore": ("shop", "books"),
     "lawyer": ("office", "lawyer"),
     "accountant": ("office", "accountant"),
     "insurance": ("office", "insurance"),
     "notary": ("office", "notary"),
     "engineer": ("office", "engineer"),
+    "financial advisor": ("office", "financial_advisor"),
     "it": ("office", "it"),
     "telecom": ("shop", "mobile_phone"),
     "architect": ("office", "architect"),
     "photo": ("craft", "photographer"),
     "pet": ("amenity", "veterinary"),
+    "bar": ("amenity", "bar"),
+    "nightclub": ("amenity", "nightclub"),
+    "place of worship": ("amenity", "place_of_worship"),
+    "funeral": ("shop", "funeral_directors"),
+    "sports centre": ("leisure", "sports_centre"),
     "library": ("amenity", "library"),
+    "parking": ("amenity", "parking"),
     "park": ("leisure", "park"),
 }
 MAX_PHOTON_KM = float(os.environ.get("MAX_PHOTON_KM", "120"))
@@ -423,11 +462,13 @@ class PhotonScraper(BaseScraper):
 
     @staticmethod
     def _mapped_tag(q):
-        lowered = q.lower()
+        lowered = q.lower().replace(" ", "")
+        best, best_len = None, -1
         for key, tag in PHOTON_TAG_MAP.items():
-            if key.replace(" ", "") in lowered.replace(" ", ""):
-                return tag
-        return None
+            k = key.replace(" ", "")
+            if k in lowered and len(k) > best_len:
+                best, best_len = tag, len(k)
+        return best
 
     def _to_businesses(self, features, center):
         businesses = []

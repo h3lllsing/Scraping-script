@@ -77,6 +77,24 @@ class TestOsmQuery(unittest.TestCase):
         q = self.scraper._build_query("acme widgets", "Karachi", 20)
         self.assertIn('node["name"~"acme\\ widgets",i]', q)
 
+    def test_hospital_rule(self):
+        q = self.scraper._build_query("Hospital", "London", 20)
+        self.assertIn('node["amenity"="hospital"]', q)
+
+    def test_property_management_precedence(self):
+        q = self.scraper._build_query("property management", "London", 20)
+        self.assertIn('node["office"="property_management"]', q)
+
+    def test_roofing_rule(self):
+        q = self.scraper._build_query("Roofer", "London", 20)
+        self.assertIn('node["craft"="roofer"]', q)
+
+    def test_mapped_tag_longest_match(self):
+        self.assertEqual(PhotonScraper._mapped_tag("Parking"), ("amenity", "parking"))
+        self.assertEqual(PhotonScraper._mapped_tag("Park"), ("leisure", "park"))
+        self.assertEqual(PhotonScraper._mapped_tag("Hospital"), ("amenity", "hospital"))
+        self.assertIsNone(PhotonScraper._mapped_tag("software"))
+
     def test_unknown_source(self):
         from scraper import search_all
         with mock.patch.object(OSMScraper, "scrape", return_value=[]), mock.patch.object(
@@ -187,6 +205,26 @@ class TestApp(unittest.TestCase):
         two = asyncio.run(app.rate_limit_middleware(FakeRequest(), call_next))
         self.assertEqual(one, {"ok": True})
         self.assertEqual(two, {"ok": True})
+
+
+class TestAppEndpoints(unittest.TestCase):
+    def test_categories_endpoint(self):
+        import app
+
+        cats = app.categories()
+        self.assertIn("real estate", [c["name"] for c in cats["categories"]])
+        self.assertIn("hospital", [c["name"] for c in cats["categories"]])
+        self.assertIn("roofing", [c["name"] for c in cats["categories"]])
+
+    def test_build_csv(self):
+        import app
+
+        b = Business(name="Grand", phone="2124906650", address="NYC", source="photon",
+                     extra={"phone_via": "website"})
+        text = app._build_csv([b])
+        self.assertIn("name,phone,address", text)
+        self.assertIn("Grand,2124906650,NYC", text)
+        self.assertIn(",website", text)
 
 
 class TestLeadpack(unittest.TestCase):

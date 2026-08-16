@@ -64,7 +64,14 @@ Example response (truncated):
 | `phone_only` | bool    | `false`                     | Return only records that have a phone number.                      |
 | `enrich`     | bool    | `true`                      | Try to find phone numbers from the business's own website (free).  |
 
-Other endpoints: `/` (usage), `/health`, `/docs` (Swagger UI).
+Other endpoints:
+- `/` (usage)
+- `/health` (liveness)
+- `/export.csv` — same query params as `/scrape`, but returns a CSV download
+  (`Content-Disposition: attachment`). Great for lead-list apps and the
+  automated lead packs.
+- `/categories` — list of all 66 supported business niches (name + keyword pattern)
+- `/docs` (Swagger UI)
 
 ## Sources
 

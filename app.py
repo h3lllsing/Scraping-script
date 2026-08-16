@@ -1,3 +1,5 @@
+import csv
+import io
 import os
 import threading
 import time as _time
@@ -5,10 +7,10 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import FastAPI, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from cachetools import TTLCache
 
-from scraper import search_all
+from scraper import TAG_RULES, search_all
 
 app = FastAPI(
     title="Business Directory Scraper API",
@@ -152,3 +154,64 @@ def scrape(
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+def _slug(text):
+    return "".join(ch.lower() if ch.isalnum() else "_" for ch in (text or "")).strip("_") or "business"
+
+
+def _build_csv(results):
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow(
+        ["name", "phone", "address", "website", "latitude", "longitude", "source", "phone_via"]
+    )
+    for b in results:
+        extra = b.extra or {}
+        writer.writerow(
+            [
+                b.name or "",
+                b.phone or "",
+                b.address or "",
+                b.website or "",
+                b.latitude if b.latitude is not None else "",
+                b.longitude if b.longitude is not None else "",
+                b.source,
+                extra.get("phone_via") or "",
+            ]
+        )
+    return buf.getvalue()
+
+
+@app.get("/export.csv", summary="Download scrape results as CSV")
+def export_csv(
+    query: str = Query(..., min_length=1, description="Business type / query"),
+    location: Optional[str] = Query(None, description="City / area"),
+    limit: int = Query(20, ge=1, le=50, description="Max results (1..50)"),
+    sources: str = Query("auto", description="Comma-separated: openstreetmap, photon, google_maps"),
+    phone_only: bool = Query(False, description="Only records with a phone"),
+    enrich: bool = Query(True, description="Website-phone enrichment"),
+):
+    results, _, _ = search_all(
+        query=query,
+        location=location or "",
+        limit=limit,
+        sources=sources,
+        phone_only=phone_only,
+        enrich=enrich,
+    )
+    filename = f"leads-{_slug(query)}-{_slug(location or 'world')}-{datetime.now(timezone.utc).date().isoformat()}.csv"
+    content = _build_csv(results)
+    return StreamingResponse(
+        iter([content]),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@app.get("/categories", summary="List all supported business categories")
+def categories():
+    return {
+        "count": len(TAG_RULES),
+        "categories": [{"name": n, "pattern": p} for n, p, _ in TAG_RULES],
+    }
