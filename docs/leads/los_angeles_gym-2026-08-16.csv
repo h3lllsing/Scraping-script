@@ -1,5 +1,5 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-Gym Tonic,3106921118,"South La Cienega Boulevard 3429, Sentous, Mid-City, Los Angeles, California, 90016",https://gymtonicla.com/,34.0291401,-118.3743502,photon,website
-Gym,,"South Fairview Avenue, Bunker Hill, San Bernardino, California, 92418",,34.0875067,-117.3106398,photon,
-Gym,,"West State Street, Redlands, California, 92373",,34.0561104,-117.1981924,photon,
-Gym,,"Mojave Fish Hatchery Road, Victorville, California, 92308",,34.4738123,-117.2598155,photon,
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+Gym Tonic,3106921118,info@gymtonicla.com,"South La Cienega Boulevard 3429, Sentous, Mid-City, Los Angeles, California, 90016",https://gymtonicla.com/,34.0291401,-118.3743502,photon,website
+Gym,,,"South Fairview Avenue, Bunker Hill, San Bernardino, California, 92418",,34.0875067,-117.3106398,photon,
+Gym,,,"West State Street, Redlands, California, 92373",,34.0561104,-117.1981924,photon,
+Gym,,,"Mojave Fish Hatchery Road, Victorville, California, 92308",,34.4738123,-117.2598155,photon,

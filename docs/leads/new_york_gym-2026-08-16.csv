@@ -1,5 +1,5 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-GYM NYC,+16466784723,"Mulberry Street 227, Little Italy, Manhattan, New York, 10012",http://thegym.nyc,40.7225734,-73.9962907,photon,website
-Gym U,6464102858,"West 23rd Street 215, Chelsea District, Manhattan, New York, 10011",https://www.gymunyc.com/,40.7445345,-73.9961958,photon,website
-Gym & Sports Bar,,"8th Avenue 167, Chelsea District, Manhattan, New York, 10011",,40.7426024,-74.000701,photon,
-Gym X Boxing,,"Malcolm X Boulevard 59, Brooklyn, New York, 11221",,40.6920416,-73.9307355,photon,
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+GYM NYC,+16466784723,info@gym-nyc.com,"Mulberry Street 227, Little Italy, Manhattan, New York, 10012",http://thegym.nyc,40.7225734,-73.9962907,photon,website
+Gym U,6464102858,info@gymunyc.com,"West 23rd Street 215, Chelsea District, Manhattan, New York, 10011",https://www.gymunyc.com/,40.7445345,-73.9961958,photon,website
+Gym & Sports Bar,,,"8th Avenue 167, Chelsea District, Manhattan, New York, 10011",,40.7426024,-74.000701,photon,
+Gym X Boxing,,,"Malcolm X Boulevard 59, Brooklyn, New York, 11221",,40.6920416,-73.9307355,photon,

@@ -1,11 +1,11 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-Dente Complete Dentistry,+17732921911,"West North Avenue 1704, Wicker Park, West Town, West Chicago Township, Illinois, 60622",https://mydente.com/,41.9107448,-87.6703981,photon,website
-Dentist in Bloomingdale,+16306861328,"W Army Trail Rd 366, Cloverdale, Bloomingdale, Illinois, 60108",https://dentistinbloomingdaleil.com/,41.9374223,-88.1127345,photon,website
-Dentist in Vernon Hills,+18479784077,"Townline Road 555, Vernon Hills, Illinois, 60061",https://dentistinvernonhills.com/,42.2386266,-87.9527426,photon,website
-Dentist of Naperville,+16303550100,"East Benton Avenue 10, Naperville, Illinois, 60540",https://dentistofnaperville.net/,41.7749661,-88.1474669,photon,website
-Emergency Dentist of Chicago,7734611973,"West Lawrence Avenue 4703, Irving Park, Jefferson Township, Illinois, 60630",https://emergencydentistchicago.com/,41.967884,-87.7456127,photon,website
-Milktooth Pediatric Dentistry,5867846725,"West Chicago Avenue 2127, Ukrainian Village, West Town, Chicago, Illinois, 60622",https://www.milktoothdental.com/,41.895716,-87.6806245,photon,website
-Strobel Dentistry,3127263135,"East Washington Street 25, Jewelers Row, The Loop, Chicago, Illinois, 60602",https://strobeldentistry.com,41.8829842,-87.6266479,photon,website
-Dentistry,,"Randall Road, Mulberry Grove, Elgin, Illinois, 60177",,41.9906385,-88.3418884,photon,
-Family Dentist,,"North Pulaski Road 5240, Brynford Park, North Park, Jefferson Township, Illinois, 60630",,41.976818,-87.7289856,photon,
-Pure Design Dentistry,,"North Clybourn Avenue, Ranch Triangle, Lincoln Park, North Chicago Township, Illinois, 60614",,41.9128068,-87.6523844,photon,
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+Dente Complete Dentistry,+17732921911,info@mydente.com,"West North Avenue 1704, Wicker Park, West Town, West Chicago Township, Illinois, 60622",https://mydente.com/,41.9107448,-87.6703981,photon,website
+Dentist in Bloomingdale,+16306861328,dentalcare@dentistinbloomingdaleil.com,"W Army Trail Rd 366, Cloverdale, Bloomingdale, Illinois, 60108",https://dentistinbloomingdaleil.com/,41.9374223,-88.1127345,photon,website
+Dentist in Vernon Hills,+18479784077,dentalcare@dentistinvernonhills.com,"Townline Road 555, Vernon Hills, Illinois, 60061",https://dentistinvernonhills.com/,42.2386266,-87.9527426,photon,website
+Dentist of Naperville,+16303550100,,"East Benton Avenue 10, Naperville, Illinois, 60540",https://dentistofnaperville.net/,41.7749661,-88.1474669,photon,website
+Emergency Dentist of Chicago,7734611973,,"West Lawrence Avenue 4703, Irving Park, Jefferson Township, Illinois, 60630",https://emergencydentistchicago.com/,41.967884,-87.7456127,photon,website
+Milktooth Pediatric Dentistry,5867846725,info@milktoothdental.com,"West Chicago Avenue 2127, Ukrainian Village, West Town, Chicago, Illinois, 60622",https://www.milktoothdental.com/,41.895716,-87.6806245,photon,website
+Strobel Dentistry,3127263135,office@strobeldentistry.com,"East Washington Street 25, Jewelers Row, The Loop, Chicago, Illinois, 60602",https://strobeldentistry.com,41.8829842,-87.6266479,photon,website
+Dentistry,,,"Randall Road, Mulberry Grove, Elgin, Illinois, 60177",,41.9906385,-88.3418884,photon,
+Family Dentist,,,"North Pulaski Road 5240, Brynford Park, North Park, Jefferson Township, Illinois, 60630",,41.976818,-87.7289856,photon,
+Pure Design Dentistry,,,"North Clybourn Avenue, Ranch Triangle, Lincoln Park, North Chicago Township, Illinois, 60614",,41.9128068,-87.6523844,photon,

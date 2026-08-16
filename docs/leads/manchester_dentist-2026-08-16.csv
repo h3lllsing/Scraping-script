@@ -1,2 +1,2 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-Dentist,,"New Road 119, Rubery, Birmingham, England, B45 9JR",,52.3929957,-2.0208794,photon,
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+Dentist,,,"New Road 119, Rubery, Birmingham, England, B45 9JR",,52.3929957,-2.0208794,photon,

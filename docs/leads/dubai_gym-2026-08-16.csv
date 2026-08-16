@@ -1,9 +1,9 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-GYM,,"Al Barsha 1 Street, Al Barsha 1, Dubai",,25.1132795,55.194276,photon,
-GYM,,"4a Street, Al Quoz Industrial Area 2, Al Quoz Community, Dubai",,25.1438308,55.2453529,photon,
-Gym,,"Latifa Bint Hamdan Street, Al Quoz 4, Al Quoz Community, Dubai",,25.1492614,55.2457981,photon,
-GYM,,"Abu Baker Al Siddique Road, Hor Al Anz East, Hor Al Anz, Dubai",,25.2740948,55.329828,photon,
-Gym,,"Obadah Bin Al Samet Street, Al Qasimia, Sharjah",,25.3446651,55.3923461,photon,
-GYM,,"Sheikh Khalifa Bin Zayed Street, Al Sawan, Ajman",,25.3930157,55.4335907,photon,
-Gym,,"Zayed The First Street, Al Zahiyah, Abu Dhabi",,24.4953879,54.3773058,photon,
-gym💪🏼🔥,,"Al Mreer Street, ME11, Mohammed Bin Zayed City, Mohamed Bin Zayed City, Abu Dhabi",,24.3287848,54.5365543,photon,
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+GYM,,,"Al Barsha 1 Street, Al Barsha 1, Dubai",,25.1132795,55.194276,photon,
+GYM,,,"4a Street, Al Quoz Industrial Area 2, Al Quoz Community, Dubai",,25.1438308,55.2453529,photon,
+Gym,,,"Latifa Bint Hamdan Street, Al Quoz 4, Al Quoz Community, Dubai",,25.1492614,55.2457981,photon,
+GYM,,,"Abu Baker Al Siddique Road, Hor Al Anz East, Hor Al Anz, Dubai",,25.2740948,55.329828,photon,
+Gym,,,"Obadah Bin Al Samet Street, Al Qasimia, Sharjah",,25.3446651,55.3923461,photon,
+GYM,,,"Sheikh Khalifa Bin Zayed Street, Al Sawan, Ajman",,25.3930157,55.4335907,photon,
+Gym,,,"Zayed The First Street, Al Zahiyah, Abu Dhabi",,24.4953879,54.3773058,photon,
+gym💪🏼🔥,,,"Al Mreer Street, ME11, Mohammed Bin Zayed City, Mohamed Bin Zayed City, Abu Dhabi",,24.3287848,54.5365543,photon,

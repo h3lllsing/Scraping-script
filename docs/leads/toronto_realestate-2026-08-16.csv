@@ -1,2 +1,2 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-Real Estate Information,,"The Queensway South, Keswick, Ontario, L4P 2B3",,44.2240517,-79.4647874,photon,
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+Real Estate Information,,,"The Queensway South, Keswick, Ontario, L4P 2B3",,44.2240517,-79.4647874,photon,

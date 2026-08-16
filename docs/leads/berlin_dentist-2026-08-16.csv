@@ -1,7 +1,7 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-Dentist Dr. Jana Seemann & Iljana Merkel,+493055005777,"Otto-Schmirgal-Straße 5, Sewanviertel, Friedrichsfelde, Berlin, 10319",https://www.zahnaerzte-am-tierpark.de/,52.4971225,13.5209527,photon,website
-Dentisten Berlin,0306871783,"Karl-Marx-Straße 124, Rollbergsiedlung, Neukölln, Berlin, 12043",https://www.dentistenberlin.de/,52.4778329,13.4380264,photon,website
-Dentisten Berlin Seeburg,03320150872,"Alte Dorfstraße 15, Seeburg, Dallgow-Döberitz, Brandenburg, 14624",https://www.dentistenberlin.de/seeburg,52.5090185,13.1205495,photon,website
-Dentists office Johan Michael Schmidt,643503031264,"Grolmanstraße, Charlottenburg, Berlin, 10623",https://www.zahnaerzte-charlottenburg.de/,52.5072792,13.3216512,photon,website
-Dentist Kantstrasse,,"Kantstraße, Charlottenburg, Berlin, 10627",https://zahnarzt-kantstr.de/,52.5067727,13.3083202,photon,
-Dentist's Office Renate Huebner,,"Graefestraße 76, Graefekiez, Kreuzberg, Berlin, 10967",,52.4928693,13.4178515,photon,
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+Dentist Dr. Jana Seemann & Iljana Merkel,+493055005777,info@zahnaerzte-am-tierpark.de,"Otto-Schmirgal-Straße 5, Sewanviertel, Friedrichsfelde, Berlin, 10319",https://www.zahnaerzte-am-tierpark.de/,52.4971225,13.5209527,photon,website
+Dentisten Berlin,0306871783,,"Karl-Marx-Straße 124, Rollbergsiedlung, Neukölln, Berlin, 12043",https://www.dentistenberlin.de/,52.4778329,13.4380264,photon,website
+Dentisten Berlin Seeburg,03320150872,,"Alte Dorfstraße 15, Seeburg, Dallgow-Döberitz, Brandenburg, 14624",https://www.dentistenberlin.de/seeburg,52.5090185,13.1205495,photon,website
+Dentists office Johan Michael Schmidt,643503031264,zahnaerzte.schmidt@gmail.com,"Grolmanstraße, Charlottenburg, Berlin, 10623",https://www.zahnaerzte-charlottenburg.de/,52.5072792,13.3216512,photon,website
+Dentist Kantstrasse,,kontakt@zahnarzt-kantstr.de,"Kantstraße, Charlottenburg, Berlin, 10627",https://zahnarzt-kantstr.de/,52.5067727,13.3083202,photon,
+Dentist's Office Renate Huebner,,,"Graefestraße 76, Graefekiez, Kreuzberg, Berlin, 10967",,52.4928693,13.4178515,photon,

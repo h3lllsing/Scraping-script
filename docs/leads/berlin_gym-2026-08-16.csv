@@ -1,2 +1,2 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-Gym TU Sport,+493031426648,"Straße des 17. Juni 145, Spreestadt Charlottenburg, Charlottenburg, Berlin, 10623",https://www.tu-sport.de/sportprogramm/fitness-studio/,52.5122911,13.3238482,photon,website
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+Gym TU Sport,+493031426648,szegeda@tu-berlin.de,"Straße des 17. Juni 145, Spreestadt Charlottenburg, Charlottenburg, Berlin, 10623",https://www.tu-sport.de/sportprogramm/fitness-studio/,52.5122911,13.3238482,photon,website

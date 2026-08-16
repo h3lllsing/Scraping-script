@@ -1,2 +1,2 @@
-﻿name,phone,address,website,latitude,longitude,source,phone_via
-Real Estate Investors Plc,01212123446,"Colmore Row 75/77, Rea Valley, Jewellery Quarter, Birmingham, England, B3 2AP",https://reiplc.com,52.4814031,-1.9004712,photon,website
+﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+Real Estate Investors Plc,01212123446,invest@reiplc.com,"Colmore Row 75/77, Rea Valley, Jewellery Quarter, Birmingham, England, B3 2AP",https://reiplc.com,52.4814031,-1.9004712,photon,website
