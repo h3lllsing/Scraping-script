@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+
+# personal / sensitive files that must not be committed
+cookies.txt
+sso_cookies.txt
+login_resp.html
+gaming-tweaks-guide.md

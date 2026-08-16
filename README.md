@@ -1,1 +1,113 @@
-# Scraping-script
+# Business Directory Scraper API
+
+Lightweight FastAPI service that scrapes business **names**, **phone numbers** and
+**addresses** for an arbitrary `query` + `location` using `requests` + `BeautifulSoup`.
+No API keys required. Ready to deploy on Render.
+
+> **Honest technical note:** Google Maps now renders search results entirely via
+> JavaScript, so plain `requests` (no browser) can no longer see the listings
+> Google serves. This project therefore scrapes **public web/OSM data** for the
+> actual listings, and ships a best-effort Google Maps parser that captures
+> server-rendered place data when Google emits any (usually none on the JS app).
+> See "Sources" below.
+
+## Quick start (local)
+
+```bash
+pip install -r requirements.txt
+uvicorn app:app --reload --port 8000
+```
+
+Then call:
+
+```text
+GET http://127.0.0.1:8000/scrape?query=RealEstate&location=Karachi
+```
+
+Example response (truncated):
+
+```json
+{
+  "query": "RealEstate",
+  "location": "Karachi",
+  "count": 3,
+  "results": [
+    {
+      "name": "Real Estate Insvestment",
+      "phone": null,
+      "address": "Abdul Sattar Edhi Road, Clifton Block 4, Saddar Town, Sindh, 75600",
+      "website": null,
+      "latitude": 24.813,
+      "longitude": 67.046,
+      "source": "photon",
+      "extra": { "osm_type": "N", "osm_id": 4828729779, "category": "office:estate_agent" }
+    }
+  ],
+  "sources": {
+    "openstreetmap": { "status": "error", "error": "..." },
+    "photon": { "status": "ok", "error": null }
+  }
+}
+```
+
+## API
+
+| Parameter    | Type    | Default                     | Description                                                        |
+|--------------|---------|-----------------------------|--------------------------------------------------------------------|
+| `query`      | str     | required                    | Business type or keyword, e.g. `RealEstate`, `restaurant`, `hotel` |
+| `location`   | str     | —                           | City / area, e.g. `Karachi`, `Berlin`. Optional.                    |
+| `limit`      | int     | `20`                        | Max results (`1..50`).                                             |
+| `sources`    | str     | `openstreetmap,photon`      | Comma list: `openstreetmap`, `photon`, `google_maps`, `auto`.      |
+| `phone_only` | bool    | `false`                     | Return only records that have a phone number.                      |
+
+Other endpoints: `/` (usage), `/health`, `/docs` (Swagger UI).
+
+## Sources
+
+- **openstreetmap** — geocodes the location (Nominatim), then queries Overpass for
+  businesses by OSM tag (e.g. `office=estate_agent`, `amenity=restaurant`).
+  Returns `name`, `address`, `phone`, `website` when those tags exist in OSM.
+  This is the only free source that yields real phone numbers.
+  Public Overpass mirrors can be rate-limited/busy; the app retries several mirrors
+  and degrades gracefully (you'll see `"status": "error"` per source, never a crash).
+- **photon** — public Photon (komoot) OSM POI search. Reliable, fast, keyless.
+  Good `name` + `address`, no phone field. Results are distance-sorted to the location.
+- **google_maps** — best-effort parser of the Google Maps HTML
+  (`schema.org` microdata + `APP_INITIALIZATION_STATE`). Usually returns nothing
+  because results are JS-rendered; included for completeness when you set
+  `sources=google_maps`. Scraping Google Maps violates its ToS — use with caution.
+
+### Phone numbers: the honest picture
+
+Phones come from OpenStreetMap tags, which are sparse (10–25 % of mapped
+businesses). For dependable phone data in production, pair this app with an
+official API (e.g. Google Places / Foursquare) via a small custom source — the
+`scraper.py` module is designed to be extended by subclassing `BaseScraper`.
+
+## Configuration (env vars)
+
+| Variable             | Default | Purpose                                    |
+|----------------------|---------|--------------------------------------------|
+| `SCRAPER_USER_AGENT` | Chrome UA | User-Agent used for all HTTP requests    |
+| `SCRAPER_TIMEOUT`    | `20`    | Socket timeout (s) for HTML requests        |
+| `OVERPASS_DEADLINE`  | `45`    | Overpass query timeout (s)                  |
+| `OVERPASS_RETRIES`   | `1`     | Extra lighter retry passes after failure    |
+| `MAX_BBOX_DEG`       | `1.3`   | Cap on geocoded bounding-box size (degrees) |
+| `MAX_PHOTON_KM`      | `120`   | Drop Photon hits farther than this (km)     |
+
+## Deploy on Render
+
+1. Push this folder to a GitHub repo.
+2. On Render: **New → Web Service**, pick the repo.
+   Language is auto-detected (Python 3.12).
+3. Build command: `pip install -r requirements.txt`
+4. Start command: `uvicorn app:app --host 0.0.0.0 --port $PORT`
+5. Deploy, then open `https://<your-service>.onrender.com/scrape?query=RealEstate&location=Karachi`
+
+A `render.yaml` blueprint is included so you can also use **New → Blueprint**.
+
+## Legal
+
+Public OpenStreetMap/Photon data is used per their usage policies (ODbL; Photon
+asks for fair usage + attribution). Respect the ToS of any web source you point
+this at, and do not hammer shared public endpoints.
