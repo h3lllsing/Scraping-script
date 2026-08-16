@@ -1,4 +1,5 @@
 import asyncio
+import re
 import unittest
 from unittest import mock
 
@@ -47,6 +48,40 @@ class TestExtractPhone(unittest.TestCase):
     def test_date_like_skipped(self):
         html = "<html><body><p>Published 2025-01-01, reach us at +49 30 1234567 today.</p></body></html>"
         self.assertEqual(scraper.extract_phone_from_html(html), "+49301234567")
+
+
+class TestExtractEmails(unittest.TestCase):
+    def test_mailto_link(self):
+        html = '<a href="mailto:info@acme.com">Email us</a>'
+        self.assertEqual(scraper.extract_emails_from_html(html), ["info@acme.com"])
+
+    def test_meta_and_itemprop(self):
+        html = '<meta name="email" content="sales@shop.io"><span itemprop="email">billing@shop.io</span>'
+        emails = scraper.extract_emails_from_html(html)
+        self.assertIn("sales@shop.io", emails)
+        self.assertIn("billing@shop.io", emails)
+
+    def test_jsonld(self):
+        html = '<script type="application/ld+json">{"email":"contact@law.com"}</script>'
+        self.assertEqual(scraper.extract_emails_from_html(html), ["contact@law.com"])
+
+    def test_body_text_regex(self):
+        html = "<html><body><p>Write to hello@mailbox.co.uk for quotes.</p></body></html>"
+        self.assertEqual(scraper.extract_emails_from_html(html), ["hello@mailbox.co.uk"])
+
+    def test_filters_images_and_example(self):
+        html = '<a href="mailto:a@x.com"></a><img src="x"><p>noreply@example.com x.png</p>'
+        emails = scraper.extract_emails_from_html(html)
+        self.assertIn("a@x.com", emails)
+        self.assertFalse(any(e in ("noreply@example.com",) for e in emails))
+
+    def test_empty(self):
+        self.assertEqual(scraper.extract_emails_from_html(None), [])
+        self.assertEqual(scraper.extract_emails_from_html("<p>no email here</p>"), [])
+
+    def test_limit(self):
+        html = "<p>" + " ".join(f"user{i}@mail.com" for i in range(6)) + "</p>"
+        self.assertEqual(len(scraper.extract_emails_from_html(html, limit=2)), 2)
 
 
 class TestDedupe(unittest.TestCase):
@@ -114,6 +149,13 @@ class TestEnricher(unittest.TestCase):
             e.enrich([b], max_sites=5)
         self.assertEqual(b.phone, "+15105551234")
         self.assertEqual(b.extra.get("phone_via"), "website")
+
+    def test_enrich_sets_email(self):
+        b = Business(name="Mail Co", website="https://mailer.example")
+        e = WebsitePhoneEnricher()
+        with mock.patch.object(e, "_fetch", return_value='<a href="mailto:hello@mailer.example">hi</a>'):
+            e.enrich([b], max_sites=5)
+        self.assertEqual(b.extra.get("email"), ["hello@mailer.example"])
 
     def test_social_sites_skipped(self):
         b = Business(name="Fb Co", website="https://facebook.com/foo")
@@ -207,24 +249,102 @@ class TestApp(unittest.TestCase):
         self.assertEqual(two, {"ok": True})
 
 
-class TestAppEndpoints(unittest.TestCase):
+class TestCategories(unittest.TestCase):
     def test_categories_endpoint(self):
         import app
 
         cats = app.categories()
-        self.assertIn("real estate", [c["name"] for c in cats["categories"]])
-        self.assertIn("hospital", [c["name"] for c in cats["categories"]])
-        self.assertIn("roofing", [c["name"] for c in cats["categories"]])
+        names = [c["name"] for c in cats["categories"]]
+        self.assertIn("real estate", names)
+        self.assertIn("hospital", names)
+        self.assertIn("roofing", names)
+        for expected in ("auto parts", "chiropractor", "glazier", "handyman", "cinema", "marina"):
+            self.assertIn(expected, names)
+
+    def test_new_rules_map_photon(self):
+        pairs = [
+            ("auto parts", ("shop", "car_parts")),
+            ("chiropractor", ("healthcare", "chiropractor")),
+            ("glazier", ("craft", "glazier")),
+            ("handyman", ("craft", "handyman")),
+            ("cinema", ("amenity", "cinema")),
+            ("marina", ("leisure", "marina")),
+        ]
+        for name, want in pairs:
+            self.assertEqual(scraper.PHOTON_TAG_MAP.get(name), want, name)
+
+    def test_rule_hit_priority_nail_before_salon(self):
+        names = [n for n, _, _ in scraper.TAG_RULES]
+        self.assertLess(names.index("nail salon"), names.index("salon"))
+        for name, pattern, filters in scraper.TAG_RULES:
+            if re.search(pattern, "nail salon", re.IGNORECASE):
+                self.assertEqual(name, "nail salon")
+                self.assertIn("shop=beauty", filters)
+                break
+        else:
+            self.fail("no rule matched 'nail salon'")
+
+    def test_photon_longest_match(self):
+        b = PhotonScraper()
+        # "hospital" must map to amenity=hospital, not the shorter "it" office key
+        self.assertEqual(b._mapped_tag("hospital"), ("amenity", "hospital"))
+        self.assertEqual(b._mapped_tag("auto parts"), ("shop", "car_parts"))
+        self.assertEqual(b._mapped_tag("unknown thing xyz"), None)
 
     def test_build_csv(self):
         import app
 
         b = Business(name="Grand", phone="2124906650", address="NYC", source="photon",
-                     extra={"phone_via": "website"})
+                     extra={"phone_via": "website", "email": ["hi@grand.example"]})
         text = app._build_csv([b])
-        self.assertIn("name,phone,address", text)
-        self.assertIn("Grand,2124906650,NYC", text)
+        self.assertIn("name,phone,email,address", text)
+        self.assertIn("Grand,2124906650,hi@grand.example,NYC", text)
         self.assertIn(",website", text)
+
+
+class TestSearchAllClamp(unittest.TestCase):
+    def test_max_results_env_clamps(self):
+        items = [
+            Business(name=f"X {i}", address=f"{i} Street") for i in range(5)
+        ]
+        with mock.patch.object(scraper, "MAX_RESULTS", 3), mock.patch.object(
+            OSMScraper, "scrape", return_value=items
+        ), mock.patch.object(PhotonScraper, "scrape", return_value=items):
+            results, _, enriched = scraper.search_all(
+                "restaurant", "Karachi", limit=999, sources="openstreetmap,photon",
+                enrich=False,
+            )
+        self.assertEqual(len(results), 3)
+        self.assertEqual(enriched, 0)
+
+    def test_max_results_default(self):
+        self.assertEqual(scraper.MAX_RESULTS, 50)
+
+
+class TestHealthProbe(unittest.TestCase):
+    def test_health_probe_degraded_on_empty(self):
+        import app
+
+        class FakePhoton:
+            def scrape(self, *a, **k):
+                return []
+
+        class FakeOSM:
+            def scrape(self, *a, **k):
+                return []
+
+        with mock.patch.object(app, "PhotonScraper", FakePhoton), mock.patch.object(
+            app, "OSMScraper", FakeOSM
+        ):
+            out = app.health(probe=True)
+        self.assertEqual(out["probe"], True)
+        self.assertEqual(out["sources"]["photon"], "empty")
+        self.assertEqual(out["status"], "degraded")
+
+    def test_health_plain(self):
+        import app
+
+        self.assertEqual(app.health(probe=False), {"status": "ok", "probe": False})
 
 
 class TestLeadpack(unittest.TestCase):

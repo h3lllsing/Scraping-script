@@ -2,12 +2,15 @@ import os
 import re
 import json
 import time
+import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
 
 import requests
 from bs4 import BeautifulSoup
+
+logger = logging.getLogger("scraper")
 
 USER_AGENT = os.environ.get(
     "SCRAPER_USER_AGENT",
@@ -26,6 +29,7 @@ OVERPASS_RETRIES = int(os.environ.get("OVERPASS_RETRIES", "1"))
 ENRICH_MAX_SITES = int(os.environ.get("ENRICH_MAX_SITES", "10"))
 ENRICH_USE_OSM_API = os.environ.get("ENRICH_USE_OSM_API", "1") == "1"
 ENRICH_DEFAULT = os.environ.get("ENRICH_DEFAULT", "1") == "1"
+MAX_RESULTS = int(os.environ.get("MAX_RESULTS", "50"))
 
 BASE_HEADERS = {
     "User-Agent": USER_AGENT,
@@ -144,6 +148,8 @@ TAG_RULES = [
     ("car rental", r"(car rental|rent a car|cab service|taxi)", ["amenity=car_rental", "amenity=taxi"]),
     ("car repair", r"(auto repair|mechanic|workshop|garage)", ["shop=car_repair", "shop=car"]),
     ("car dealer", r"(car dealer|automall|auto dealer|showroom|pre-?owned cars)", ["shop=car"]),
+    ("auto parts", r"(auto parts|car parts|autoparts|motorcycle parts)", ["shop=car_parts", "shop=motorcycle"]),
+    ("glazier", r"(glazier|glass repair|glass company|window glass)", ["craft=glazier"]),
     ("tire shop", r"(tire|tyre|wheel alignment)", ["shop=tyres"]),
     ("roofing", r"(roofing|roofer|roof repair)", ["craft=roofer"]),
     ("hvac", r"(hvac|heating|air conditioning|ac repair|furnace)", ["craft=hvac"]),
@@ -151,10 +157,17 @@ TAG_RULES = [
     ("painting", r"(painting contractor|house painting|painter)", ["craft=painter"]),
     ("plumber", r"(plumber|plumbing)", ["craft=plumber"]),
     ("electrician", r"(electrician|electrical)", ["craft=electrician"]),
+    ("handyman", r"(handyman|handy man|odd jobs|home repairs)", ["craft=handyman"]),
+    ("chiropractor", r"(chiropractor|chiropractic)", ["healthcare=chiropractor", "office=chiropractor"]),
+    ("tattoo", r"(tattoo|tattoo studio|piercing)", ["shop=tattoo"]),
+    ("nail salon", r"(nail salon|nail bar|manicure|pedicure)", ["shop=beauty", "shop=nail_art"]),
     ("salon", r"(salon|beauty parlor|hair salon|hairdresser|barber)", ["shop=hairdresser", "shop=beauty"]),
     ("spa", r"(massage|spa|wellness)", ["shop=beauty", "leisure=spa"]),
+    ("golf", r"(golf course|golf club|mini golf)", ["leisure=golf_course"]),
+    ("bowling", r"(bowling|bowling alley)", ["leisure=bowling_alley"]),
     ("landscaping", r"(landscap|lawn care|garden service|gardener)", ["shop=garden_centre", "craft=gardener"]),
     ("grocery", r"(grocery|supermarket|grocery store|mart)", ["shop=supermarket", "shop=grocery"]),
+    ("liquor", r"(liquor store|liquor|wine store|spirits|off-?licence)", ["shop=alcohol"]),
     ("bakery", r"(bakery|baker)", ["shop=bakery"]),
     ("travel", r"(travel agent|tourism office)", ["office=travel_agent"]),
     ("laundry", r"(laundry|dry cleaner|dry cleaning)", ["shop=laundry", "shop=dry_cleaning"]),
@@ -171,7 +184,9 @@ TAG_RULES = [
     ("accountant", r"(accountant|accounting|bookkeeper|tax consultant)", ["office=accountant"]),
     ("insurance", r"(insurance)", ["office=insurance"]),
     ("notary", r"(notary|notary public)", ["office=notary"]),
+    ("surveyor", r"(surveyor|land survey)", ["office=surveyor"]),
     ("engineer", r"(engineer|engineering)", ["office=engineer"]),
+    ("medical supply", r"(medical supply|medical equipment|surgical supply|medical store)", ["shop=medical_supply"]),
     ("financial advisor", r"(financial advisor|financial planner|wealth management|investment advisor)", ["office=financial_advisor", "office=financial"]),
     ("it services", r"(software|information technology|it services|computer services)", ["office=it", "office=computer"]),
     ("telecom", r"(telecom|mobile shop|phone shop)", ["shop=mobile_phone"]),
@@ -184,10 +199,14 @@ TAG_RULES = [
     ("civic", r"(post office|tax office|police station|fire station)", ["amenity=post_office", "amenity=police", "amenity=fire_station"]),
     ("transport", r"(bus station|train station|airport)", ["highway=bus_stop", "railway=station", "aeroway=aerodrome"]),
     ("bar", r"(\bbar\b|pub|nightclub|lounge)", ["amenity=bar", "amenity=pub", "amenity=nightclub"]),
+    ("cinema", r"(cinema|movie theater|movie theatre|multiplex)", ["amenity=cinema"]),
+    ("printing", r"(print shop|printing|copyshop|copy shop)", ["shop=copyshop"]),
     ("place of worship", r"(church|mosque|temple|gurdwara|synagogue|cathedral)", ["amenity=place_of_worship"]),
     ("funeral", r"(funeral|crematorium|undertaker)", ["shop=funeral_directors", "amenity=crematorium"]),
     ("sports centre", r"(sports centre|sports center|sports club|stadium|tennis club|golf club)", ["leisure=sports_centre", "leisure=stadium", "leisure=golf_course"]),
     ("library", r"(library)", ["amenity=library"]),
+    ("marina", r"(marina|boat yard|yacht club|boat rentals)", ["leisure=marina"]),
+    ("campsite", r"(campground|campsite|caravan park|cabin rental)", ["tourism=camp_site", "tourism=caravan_site"]),
     ("parking", r"(parking garage|parking lot|car park)", ["amenity=parking"]),
     ("toilet", r"(public toilet|restroom|washroom)", ["amenity=toilets"]),
     ("park", r"(park|playground|garden)", ["leisure=park", "leisure=playground", "leisure=garden"]),
@@ -375,6 +394,8 @@ PHOTON_TAG_MAP = {
     "car rental": ("amenity", "car_rental"),
     "car repair": ("shop", "car_repair"),
     "car dealer": ("shop", "car"),
+    "auto parts": ("shop", "car_parts"),
+    "glazier": ("craft", "glazier"),
     "tire shop": ("shop", "tyres"),
     "roofing": ("craft", "roofer"),
     "hvac": ("craft", "hvac"),
@@ -382,9 +403,15 @@ PHOTON_TAG_MAP = {
     "painting": ("craft", "painter"),
     "plumber": ("craft", "plumber"),
     "electrician": ("craft", "electrician"),
+    "handyman": ("craft", "handyman"),
+    "chiropractor": ("healthcare", "chiropractor"),
+    "tattoo": ("shop", "tattoo"),
+    "nail salon": ("shop", "beauty"),
     "salon": ("shop", "hairdresser"),
     "barber": ("shop", "barber"),
     "spa": ("shop", "beauty"),
+    "golf": ("leisure", "golf_course"),
+    "bowling": ("leisure", "bowling_alley"),
     "landscaping": ("craft", "gardener"),
     "supermarket": ("shop", "supermarket"),
     "bakery": ("shop", "bakery"),
@@ -396,7 +423,9 @@ PHOTON_TAG_MAP = {
     "accountant": ("office", "accountant"),
     "insurance": ("office", "insurance"),
     "notary": ("office", "notary"),
+    "surveyor": ("office", "surveyor"),
     "engineer": ("office", "engineer"),
+    "medical supply": ("shop", "medical_supply"),
     "financial advisor": ("office", "financial_advisor"),
     "it": ("office", "it"),
     "telecom": ("shop", "mobile_phone"),
@@ -405,10 +434,14 @@ PHOTON_TAG_MAP = {
     "pet": ("amenity", "veterinary"),
     "bar": ("amenity", "bar"),
     "nightclub": ("amenity", "nightclub"),
+    "cinema": ("amenity", "cinema"),
+    "printing": ("shop", "copyshop"),
     "place of worship": ("amenity", "place_of_worship"),
     "funeral": ("shop", "funeral_directors"),
     "sports centre": ("leisure", "sports_centre"),
     "library": ("amenity", "library"),
+    "marina": ("leisure", "marina"),
+    "campsite": ("tourism", "camp_site"),
     "parking": ("amenity", "parking"),
     "park": ("leisure", "park"),
 }
@@ -722,6 +755,64 @@ def extract_phone_from_html(html):
     return None
 
 
+EMAIL_SKIP_DOMAINS = {"example.com", "example.org", "example.net", "example.edu", "test.com"}
+
+
+def extract_emails_from_html(html, limit=3):
+    if not html:
+        return []
+    soup = BeautifulSoup(html, "html.parser")
+    found = []
+    seen = set()
+    email_re = re.compile(r"[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}")
+
+    def add(addr):
+        if not addr:
+            return
+        addr = addr.strip().lower()
+        if len(addr) > 254:
+            return
+        if addr in seen:
+            return
+        seen.add(addr)
+        domain = addr.split("@", 1)[-1] if "@" in addr else ""
+        m = email_re.fullmatch(addr)
+        if m and domain not in EMAIL_SKIP_DOMAINS and not any(
+            t in addr for t in (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")
+        ):
+            found.append(addr)
+
+    for a in soup.select('a[href^="mailto:"]'):
+        href = a.get("href", "")
+        addr = href.split(":", 1)[-1].split("?", 1)[0].strip()
+        add(addr)
+        add(a.get_text(strip=True))
+
+    for el in soup.select(
+        '[itemprop="email"], meta[name="email"], meta[property="email"], a[itemprop="email"]'
+    ):
+        add(el.get("content") or el.get_text(strip=True))
+
+    for sc in soup.select('script[type="application/ld+json"]'):
+        text = (sc.string or sc.get_text() or "")
+        try:
+            payload = json.loads(text)
+            for item in _walk_ld(payload):
+                if isinstance(item, dict):
+                    add(item.get("email") if isinstance(item.get("email"), str) else None)
+        except Exception:
+            for m in re.finditer(r'"email"\s*:\s*"([^"]+)"', text):
+                add(m.group(1))
+
+    if len(found) < limit:
+        body = soup.get_text(" ", strip=True)[:60000]
+        for m in re.finditer(email_re, body):
+            add(m.group(0))
+            if len(found) >= limit:
+                break
+    return found[:limit]
+
+
 def _walk_ld(node):
     if isinstance(node, dict):
         yield node
@@ -785,6 +876,9 @@ class WebsitePhoneEnricher:
         if phone:
             b.phone = phone
             b.extra["phone_via"] = "website"
+        emails = extract_emails_from_html(html, limit=2)
+        if emails:
+            b.extra["email"] = emails
 
     @staticmethod
     def _is_social(url):
@@ -868,7 +962,7 @@ def dedupe(businesses):
 def search_all(query, location, limit=20, sources=None, phone_only=False, enrich=None):
     query = (query or "").strip()
     location = (location or "").strip()
-    limit = max(1, min(int(limit or 20), 50))
+    limit = max(1, min(int(limit or 20), MAX_RESULTS))
     if enrich is None:
         enrich = ENRICH_DEFAULT
     requested = [s.strip().lower() for s in (sources or "").split(",") if s.strip()]
@@ -892,6 +986,7 @@ def search_all(query, location, limit=20, sources=None, phone_only=False, enrich
             by_source[name] = {"status": "ok", "error": None, "service": name}
             return name, items
         except Exception as exc:
+            logger.warning("scrape source=%s failed: %s", name, exc)
             by_source[name] = {"status": "error", "error": str(exc)[:300], "service": name}
             return name, []
 

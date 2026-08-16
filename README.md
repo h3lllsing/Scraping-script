@@ -59,19 +59,37 @@ Example response (truncated):
 |--------------|---------|-----------------------------|--------------------------------------------------------------------|
 | `query`      | str     | required                    | Business type or keyword, e.g. `RealEstate`, `restaurant`, `hotel` |
 | `location`   | str     | —                           | City / area, e.g. `Karachi`, `Berlin`. Optional.                    |
-| `limit`      | int     | `20`                        | Max results (`1..50`).                                             |
-| `sources`    | str     | `openstreetmap,photon`      | Comma list: `openstreetmap`, `photon`, `google_maps`, `auto`.      |
-| `phone_only` | bool    | `false`                     | Return only records that have a phone number.                      |
-| `enrich`     | bool    | `true`                      | Try to find phone numbers from the business's own website (free).  |
+| `limit`      | int     | `20`                        | Max results (`1..{max}`; cap configurable via `MAX_RESULTS`). |
+| `sources`    | str     | `openstreetmap,photon`      | Comma list: `openstreetmap`, `photon`, `google_maps`, `auto`. |
+| `phone_only` | bool    | `false`                     | Return only records that have a phone number.                |
+| `enrich`     | bool    | `true`                      | Pull phone numbers + business emails from the business's own website (free). |
 
 Other endpoints:
 - `/` (usage)
-- `/health` (liveness)
+- `/health` (liveness) — add `?probe=1` to run a real mini-scrape against the
+  upstream sources and report each one's status (all sources `ok`/`empty`/`error`)
 - `/export.csv` — same query params as `/scrape`, but returns a CSV download
-  (`Content-Disposition: attachment`). Great for lead-list apps and the
-  automated lead packs.
-- `/categories` — list of all 66 supported business niches (name + keyword pattern)
+  (`Content-Disposition: attachment`). Results are cached per query+location.
+  Great for lead-list apps and the automated lead packs.
+- `/categories` — list of all 81 supported business niches (name + keyword pattern)
 - `/docs` (Swagger UI)
+
+## Enrichment fields
+
+`enrich=true` (default) visits each business's website and extracts:
+- **`phone`** — from `tel:` links, `itemprop="telephone"`, JSON-LD, and visible text
+- **`email`** (in `extra.email`) — from `mailto:` links, `itemprop="email"` /
+  meta tags, JSON-LD, and visible text (max 3). Only *published* business
+  emails are returned — the app never fabricates or guesses addresses.
+
+## Self-hosting knobs
+
+| Env var           | Default | Effect                                        |
+|-------------------|---------|-----------------------------------------------|
+| `MAX_RESULTS`     | `50`    | Cap on `limit` per request (raise for bigger export packs) |
+| `OVERPASS_RETRIES`/`OVERPASS_DEADLINE` | `1`/`25` | Overpass mirror retries & turnaround |
+| `RATE_LIMIT_PER_IP` | `30`  | Requests per IP per minute                     |
+| `ENRICH_MAX_SITES` | `10`   | Sites visited per scrape for phone/email lookup |
 
 ## Sources
 
@@ -143,9 +161,9 @@ A `render.yaml` blueprint is included so you can also use **New → Blueprint**.
 
 Sellable, ready-made CSV lead packs are auto-generated **every day at 03:00 UTC**
 by a free GitHub Actions cron (no card, no server cost). Each pack is a CSV of
-`name, phone, address, website, latitude, longitude, source` for a niche + city,
-sorted so records with a phone appear first. Packs are committed to `docs/leads/`
-so every CSV gets a permanent public URL:
+`name, phone, email, address, website, latitude, longitude, source` for a niche +
+city, sorted so records with a phone appear first. Packs are committed to
+`docs/leads/` so every CSV gets a permanent public URL:
 
 ```text
 https://raw.githubusercontent.com/h3lllsing/Scraping-script/main/docs/leads/<city>_<query>-<YYYY-MM-DD>.csv
@@ -169,3 +187,15 @@ will contain phones too (`phone_via=website` column).
 Public OpenStreetMap/Photon data is used per their usage policies (ODbL; Photon
 asks for fair usage + attribution). Respect the ToS of any web source you point
 this at, and do not hammer shared public endpoints.
+
+Important if you **resell** the output (Gumroad/RapidAPI buyers):
+- OSM data is licensed under **ODbL** — any product derived from it must credit
+  OpenStreetMap and, when shared publicly, carry the same open license. Include
+  an attribution line such as *"Data © OpenStreetMap contributors (ODbL)"* in
+  your CSV header or product listing, and publish the ODbL share-alike terms
+  alongside paid packs.
+- Emails are only ever ones the businesses themselves published (never guessed).
+  Running cold-email campaigns (sending unsolicited bulk mail to the scraped
+  addresses) can breach anti-spam law (CAN-SPAM / GDPR / PECR in the EU/UK) and
+  kills deliverability. Resell them as research/subscription leads, or get
+  recipients' consent before contacting.

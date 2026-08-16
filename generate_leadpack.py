@@ -23,6 +23,7 @@ PACKS = [
 COLUMNS = [
     "name",
     "phone",
+    "email",
     "address",
     "website",
     "latitude",
@@ -64,6 +65,7 @@ def write_leadpack(query, city, limit, base=None):
     results = data.get("results", []) or []
     for row in results:
         row["phone_via"] = (row.get("extra") or {}).get("phone_via") or ""
+        row["email"] = "; ".join((row.get("extra") or {}).get("email") or [])
     results.sort(key=lambda r: (0 if r.get("phone") else 1, (r.get("name") or "").lower()))
 
     today = datetime.date.today().isoformat()

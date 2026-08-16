@@ -10,7 +10,7 @@ from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse, StreamingResponse
 from cachetools import TTLCache
 
-from scraper import TAG_RULES, search_all
+from scraper import MAX_RESULTS, TAG_RULES, OSMScraper, PhotonScraper, search_all
 
 app = FastAPI(
     title="Business Directory Scraper API",
@@ -23,8 +23,9 @@ app = FastAPI(
         "### Quick start\n\n"
         "`GET /scrape?query=restaurant&location=New York` returns up to 50 "
         "businesses with name, phone, address, website, latitude, longitude and "
-        "source. Set `enrich=true` (default) to try pulling phone numbers from the "
-        "business's own website. Use `sources=openstreetmap,photon` for the most "
+        "source. Set `enrich=true` (default) to try pulling phone numbers and "
+        "business contact emails from the business's own website. Use "
+        "`sources=openstreetmap,photon` for the most "
         "reliable free sources.\n\n"
         "### Example response\n\n"
         "```json\n"
@@ -98,7 +99,7 @@ def scrape(
         examples=["New York"],
     ),
     limit: int = Query(
-        20, ge=1, le=50, description="Maximum number of results to return (1..50).",
+        20, ge=1, le=MAX_RESULTS, description=f"Maximum number of results to return (1..{MAX_RESULTS}; raise via MAX_RESULTS env).",
         examples=[50],
     ),
     sources: str = Query(
@@ -116,7 +117,7 @@ def scrape(
     cache_key = (
         query.strip().lower(),
         (location or "").strip().lower(),
-        min(limit, 50),
+        min(limit, MAX_RESULTS),
         sources.strip().lower(),
         phone_only,
         enrich,
@@ -152,8 +153,23 @@ def scrape(
 
 
 @app.get("/health")
-def health():
-    return {"status": "ok"}
+def health(probe: bool = Query(False, description="Run a real mini-scrape against upstream sources to verify data availability.")):
+    out = {"status": "ok", "probe": False}
+    if probe:
+        probes = {}
+        for label, scraper in (
+            ("photon", PhotonScraper()),
+            ("openstreetmap", OSMScraper()),
+        ):
+            try:
+                items = scraper.scrape("restaurant", "London", 1)
+                probes[label] = "ok" if items else "empty"
+            except Exception as exc:
+                probes[label] = f"error: {str(exc)[:120]}"
+        out["probe"] = True
+        out["sources"] = probes
+        out["status"] = "ok" if all(v == "ok" for v in probes.values()) else "degraded"
+    return out
 
 
 def _slug(text):
@@ -164,7 +180,7 @@ def _build_csv(results):
     buf = io.StringIO()
     writer = csv.writer(buf)
     writer.writerow(
-        ["name", "phone", "address", "website", "latitude", "longitude", "source", "phone_via"]
+        ["name", "phone", "email", "address", "website", "latitude", "longitude", "source", "phone_via"]
     )
     for b in results:
         extra = b.extra or {}
@@ -172,6 +188,7 @@ def _build_csv(results):
             [
                 b.name or "",
                 b.phone or "",
+                "; ".join(extra.get("email") or []),
                 b.address or "",
                 b.website or "",
                 b.latitude if b.latitude is not None else "",
@@ -187,21 +204,36 @@ def _build_csv(results):
 def export_csv(
     query: str = Query(..., min_length=1, description="Business type / query"),
     location: Optional[str] = Query(None, description="City / area"),
-    limit: int = Query(20, ge=1, le=50, description="Max results (1..50)"),
+    limit: int = Query(20, ge=1, le=MAX_RESULTS, description="Max results (1..MAX_RESULTS)"),
     sources: str = Query("auto", description="Comma-separated: openstreetmap, photon, google_maps"),
     phone_only: bool = Query(False, description="Only records with a phone"),
-    enrich: bool = Query(True, description="Website-phone enrichment"),
+    enrich: bool = Query(True, description="Website-phone-email enrichment"),
 ):
-    results, _, _ = search_all(
-        query=query,
-        location=location or "",
-        limit=limit,
-        sources=sources,
-        phone_only=phone_only,
-        enrich=enrich,
+    cache_key = (
+        "csv",
+        query.strip().lower(),
+        (location or "").strip().lower(),
+        min(limit, MAX_RESULTS),
+        sources.strip().lower(),
+        phone_only,
+        enrich,
     )
+    with CACHE_LOCK:
+        hit = CACHE.get(cache_key)
+        if hit is not None:
+            content = hit
+        else:
+            results, _, _ = search_all(
+                query=query,
+                location=location or "",
+                limit=limit,
+                sources=sources,
+                phone_only=phone_only,
+                enrich=enrich,
+            )
+            content = _build_csv(results)
+            CACHE[cache_key] = content
     filename = f"leads-{_slug(query)}-{_slug(location or 'world')}-{datetime.now(timezone.utc).date().isoformat()}.csv"
-    content = _build_csv(results)
     return StreamingResponse(
         iter([content]),
         media_type="text/csv; charset=utf-8",

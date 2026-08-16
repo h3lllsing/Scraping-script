@@ -25,24 +25,26 @@ Everything you need to put the API live on RapidAPI. Copy-paste-ready.
 ## 2. Long description (copy-paste)
 
 ```
-Scrape real business contact data — name, phone, address, website, latitude and
-longitude — for any query + location worldwide. Built on free public sources
-(OpenStreetMap + Photon) so there are no hidden third-party fees.
+Scrape real business contact data — name, phone, email, address, website,
+latitude and longitude — for any query + location worldwide. Built on free public
+sources (OpenStreetMap + Photon) so there are no hidden third-party fees.
 
 Perfect for:
-- Building lead lists for cold email / sales outreach
+- Building lead lists for sales outreach (only emails businesses themselves publish)
 - Local business directories & map apps
 - Market research dashboards
 - Enriching CRM records with verified business details
 
 Key features
-- Search any business type: restaurants, real estate agents, hotels, dentists,
-  gyms, plumbers, electricians, lawyers, insurance, clinics, salons and 30+ more
+- Search 80+ business types: restaurants, real estate agents, hotels, dentists,
+  gyms, plumbers, electricians, roofing/HVAC, car dealers, lawyers, insurance,
+  clinics, salons, cinemas, marinas and more
 - Worldwide coverage — works with any city name (New York, London, Karachi, Dubai…)
-- Free phone enrichment: set enrich=true (default) and the API visits the
-  business's own website to pull a phone number when OSM lacks one
+- Free phone + email enrichment: set enrich=true (default) and the API visits the
+  business's own website to pull a phone number and any published contact email
 - phone_only=true returns only records with a phone
 - sources=openstreetmap,photon,google_maps lets you control which source is used
+- /export.csv downloads the same results as a ready-to-use CSV file
 
 Quick example
 GET /scrape?query=restaurant&location=New York&limit=50
@@ -51,6 +53,7 @@ Honest data note
 Phones come from OpenStreetMap tags (10-25% of mapped businesses) plus website
 enrichment. Name + address coverage is strong across all big cities; phone
 coverage is partial but real and verified from the business's own website.
+Emails are only ever ones the businesses themselves published (never guessed).
 ```
 
 ## 3. Endpoints (define in RapidAPI Provider Dashboard)
@@ -70,7 +73,7 @@ coverage is partial but real and verified from the business's own website.
 - `limit` — integer 1–50, default 20.
 - `sources` — comma list: `auto` (default), `openstreetmap`, `photon`, `google_maps`.
 - `phone_only` — boolean, default false.
-- `enrich` — boolean, default true. Website-phone enrichment.
+- `enrich` — boolean, default true. Website phone + email enrichment.
 
 ## 4. Sample request (cURL — use in examples)
 
@@ -157,6 +160,9 @@ Set overage pricing to `off` initially to protect the free upstream sources
 - [ ] PayPal added in Payment Settings
 - [ ] Set a logo/icon (RapidAPI lets you upload one — improves CTR)
 - [ ] Note in description: fair-usage on public OSM sources
+- [ ] Compliance: paste the OSM attribution requirement into the listing/tos area
+      ("Data © OpenStreetMap contributors, ODbL") and mention emails are only
+      those businesses publish themselves.
 
 ## 9. Honest caveats (tell customers, avoid refunds)
 
