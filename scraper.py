@@ -54,6 +54,7 @@ def geocode(search, limit=6):
             return hit[1]
     with _GEO_LOCK:
         global _GEO_LAST_REQ
+        now = time.monotonic()
         delay = 1.05 - (now - _GEO_LAST_REQ)
         if delay > 0:
             time.sleep(delay)
@@ -173,12 +174,11 @@ TAG_RULES = [
     ("park", r"(park|playground|garden)", ["leisure=park", "leisure=playground", "leisure=garden"]),
 ]
 
-FALLBACK_GENERIC_KEYS = "amenity|shop|office|tourism|leisure|craft|highway|railway"
-
 PHONE_TEXT_RE = re.compile(
     r"(?:(?:\+?\d{1,4})[\s\-().]*)?"
     r"(?:\(\d{2,5}\)[\s\-().]*|\d{2,5}[\s\-().]{0,2})\d{3}[\s\-().]{0,2}\d{3,4}[\s\-().]{0,2}\d{0,4}"
 )
+DATE_LIKE_RE = re.compile(r"\b\d{4}[-/.]\d{1,2}[-/.]\d{1,2}\b")
 
 SOCIAL_DOMAINS = (
     "facebook.com", "instagram.com", "linkedin.com", "twitter.com", "x.com",
@@ -382,7 +382,7 @@ class PhotonScraper(BaseScraper):
 
     def _location_center(self, query, location):
         search = (location or "").strip() or (query or "").strip()
-        items = geocode(search, limit=1)
+        items = geocode(search, limit=6)
         if not items:
             return None
         try:
@@ -560,7 +560,6 @@ class GoogleMapsScraper(BaseScraper):
         seen = seen or set()
         results = []
         if isinstance(obj, dict):
-            text = json.dumps(obj, ensure_ascii=False)
             if "name" in obj and any(isinstance(obj.get(k), str) for k in ("name", "address")):
                 name = obj.get("name")
                 if isinstance(name, str) and name and not name.startswith("Google"):
@@ -673,7 +672,10 @@ def extract_phone_from_html(html):
     body = soup.get_text(" ", strip=True)
     if body:
         for m in re.finditer(PHONE_TEXT_RE, body[:60000]):
-            clean = _clean_phone(m.group(0))
+            raw = m.group(0)
+            if DATE_LIKE_RE.fullmatch(raw):
+                continue
+            clean = _clean_phone(raw)
             if clean:
                 return clean
     return None

@@ -40,7 +40,8 @@ def load_packs():
     return PACKS
 
 
-def fetch(query, city, limit):
+def fetch(query, city, limit, base=None):
+    base = (base or API_BASE).rstrip("/")
     params = {
         "query": query,
         "location": city,
@@ -48,7 +49,7 @@ def fetch(query, city, limit):
         "enrich": "true",
         "sources": "openstreetmap,photon",
     }
-    url = f"{API_BASE}/scrape?" + urllib.parse.urlencode(params)
+    url = f"{base}/scrape?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(url, headers={"User-Agent": "leadpack-generator/1.0"})
     with urllib.request.urlopen(req, timeout=150) as resp:
         return json.loads(resp.read().decode("utf-8"))
@@ -58,8 +59,8 @@ def slug(text):
     return "".join(ch.lower() if ch.isalnum() else "_" for ch in text).strip("_")
 
 
-def write_leadpack(query, city, limit):
-    data = fetch(query, city, limit)
+def write_leadpack(query, city, limit, base=None):
+    data = fetch(query, city, limit, base=base)
     results = data.get("results", []) or []
     for row in results:
         row["phone_via"] = (row.get("extra") or {}).get("phone_via") or ""
@@ -122,7 +123,7 @@ def main():
     fail = 0
     for i, (q, c, n) in enumerate(ops):
         try:
-            info = write_leadpack(q, c, n)
+            info = write_leadpack(q, c, n, base=base)
             print(f"OK {q:12s} {c:12s} rows={info['rows']:3d} phones={info['phones']:3d} -> {info['path']}")
         except Exception as exc:
             fail += 1

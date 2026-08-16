@@ -41,23 +41,23 @@ app = FastAPI(
 CACHE = TTLCache(maxsize=256, ttl=600)
 CACHE_LOCK = threading.Lock()
 
-APP_ORG = "web-scraper-demo/1.0"
-
 RATE_LIMIT_PER_IP = int(os.environ.get("RATE_LIMIT_PER_IP", "30"))
 RATE_LIMIT_WINDOW = float(os.environ.get("RATE_LIMIT_WINDOW", "60"))
+RATE_HITS_MAX = 5000
 _RATE_HITS = {}
 _RATE_LOCK = threading.Lock()
 
 
 @app.middleware("http")
 async def rate_limit_middleware(request: Request, call_next):
-    if RATE_LIMIT_PER_IP <= 0:
+    if RATE_LIMIT_PER_IP <= 0 or request.url.path == "/health":
         return await call_next(request)
     fwd = request.headers.get("x-forwarded-for")
     ip = (fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "unknown"))
     now = _time.monotonic()
     with _RATE_LOCK:
-        hits = [t for t in _RATE_HITS.get(ip, []) if now - t < RATE_LIMIT_WINDOW]
+        hits = _RATE_HITS.get(ip, [])
+        hits = [t for t in hits if now - t < RATE_LIMIT_WINDOW]
         if len(hits) >= RATE_LIMIT_PER_IP:
             _RATE_HITS[ip] = hits
             return JSONResponse(
@@ -67,6 +67,8 @@ async def rate_limit_middleware(request: Request, call_next):
             )
         hits.append(now)
         _RATE_HITS[ip] = hits
+        if len(_RATE_HITS) > RATE_HITS_MAX:
+            _RATE_HITS.pop(next(iter(_RATE_HITS)), None)
     return await call_next(request)
 
 

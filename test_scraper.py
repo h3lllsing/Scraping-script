@@ -44,6 +44,10 @@ class TestExtractPhone(unittest.TestCase):
         self.assertIsNone(scraper.extract_phone_from_html(None))
         self.assertIsNone(scraper.extract_phone_from_html("<html><p>no phone here</p></html>"))
 
+    def test_date_like_skipped(self):
+        html = "<html><body><p>Published 2025-01-01, reach us at +49 30 1234567 today.</p></body></html>"
+        self.assertEqual(scraper.extract_phone_from_html(html), "+49301234567")
+
 
 class TestDedupe(unittest.TestCase):
     def test_dedupe(self):
@@ -127,15 +131,20 @@ class TestApp(unittest.TestCase):
 
         app.RATE_LIMIT_PER_IP = 2
         app.RATE_LIMIT_WINDOW = 60
+        self.addCleanup(lambda: setattr(app, "RATE_LIMIT_PER_IP", 30))
         app._RATE_HITS.clear()
 
         class FakeHeaders:
             def get(self, _k, _d=None):
                 return "9.9.9.9"
 
+        class FakeURL:
+            path = "/scrape"
+
         class FakeRequest:
             headers = FakeHeaders()
             client = None
+            url = FakeURL()
 
         sentinel = {"ok": True}
         async def call_next(req):
@@ -151,6 +160,54 @@ class TestApp(unittest.TestCase):
         self.assertEqual(r1, sentinel)
         self.assertEqual(r2, sentinel)
         self.assertEqual(r3.status_code, 429)
+
+    def test_health_exempt_from_rate_limit(self):
+        import app
+
+        app.RATE_LIMIT_PER_IP = 1
+        self.addCleanup(lambda: setattr(app, "RATE_LIMIT_PER_IP", 30))
+        app._RATE_HITS.clear()
+
+        class FakeHeaders:
+            def get(self, _k, _d=None):
+                return "8.8.8.8"
+
+        class FakeURL:
+            path = "/health"
+
+        class FakeRequest:
+            headers = FakeHeaders()
+            client = None
+            url = FakeURL()
+
+        async def call_next(req):
+            return {"ok": True}
+
+        one = asyncio.run(app.rate_limit_middleware(FakeRequest(), call_next))
+        two = asyncio.run(app.rate_limit_middleware(FakeRequest(), call_next))
+        self.assertEqual(one, {"ok": True})
+        self.assertEqual(two, {"ok": True})
+
+
+class TestLeadpack(unittest.TestCase):
+    def test_fetch_uses_custom_base(self):
+        import generate_leadpack as g
+
+        class FakeResp:
+            def read(self):
+                return b'{"results": [], "generated_at": "x"}'
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        with mock.patch("urllib.request.urlopen", return_value=FakeResp()) as m:
+            data = g.fetch("restaurant", "Karachi", 5, base="https://custom.example:444")
+        self.assertEqual(data["results"], [])
+        url = m.call_args.args[0].full_url
+        self.assertTrue(url.startswith("https://custom.example:444/scrape?"), url)
 
 
 class TestGeocodeCache(unittest.TestCase):
