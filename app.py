@@ -1,7 +1,11 @@
+import os
+import threading
+import time as _time
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request
+from fastapi.responses import JSONResponse
 from cachetools import TTLCache
 
 from scraper import search_all
@@ -35,8 +39,35 @@ app = FastAPI(
 )
 
 CACHE = TTLCache(maxsize=256, ttl=600)
+CACHE_LOCK = threading.Lock()
 
 APP_ORG = "web-scraper-demo/1.0"
+
+RATE_LIMIT_PER_IP = int(os.environ.get("RATE_LIMIT_PER_IP", "30"))
+RATE_LIMIT_WINDOW = float(os.environ.get("RATE_LIMIT_WINDOW", "60"))
+_RATE_HITS = {}
+_RATE_LOCK = threading.Lock()
+
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    if RATE_LIMIT_PER_IP <= 0:
+        return await call_next(request)
+    fwd = request.headers.get("x-forwarded-for")
+    ip = (fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "unknown"))
+    now = _time.monotonic()
+    with _RATE_LOCK:
+        hits = [t for t in _RATE_HITS.get(ip, []) if now - t < RATE_LIMIT_WINDOW]
+        if len(hits) >= RATE_LIMIT_PER_IP:
+            _RATE_HITS[ip] = hits
+            return JSONResponse(
+                status_code=429,
+                content={"detail": "rate limit exceeded, please slow down"},
+                headers={"Retry-After": str(int(RATE_LIMIT_WINDOW))},
+            )
+        hits.append(now)
+        _RATE_HITS[ip] = hits
+    return await call_next(request)
 
 
 @app.get("/")
@@ -86,9 +117,10 @@ def scrape(
         phone_only,
         enrich,
     )
-    hit = CACHE.get(cache_key)
-    if hit is not None:
-        return hit
+    with CACHE_LOCK:
+        hit = CACHE.get(cache_key)
+        if hit is not None:
+            return hit
 
     results, sources_status, enriched = search_all(
         query=query,

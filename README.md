@@ -117,6 +117,9 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
 | `ENRICH_MAX_SITES`   | `10`    | Max websites fetched per request            |
 | `ENRICH_USE_OSM_API` | `1`     | Resolve Photon websites via OSM API (`0/1`) |
 | `ENRICH_DEFAULT`     | `1`     | Default for the `enrich` query param        |
+| `GEO_CACHE_TTL`      | `3600`  | Cache TTL (s) for Nominatim geocoding        |
+| `RATE_LIMIT_PER_IP`  | `30`    | Max requests per IP per window (`0` = off)   |
+| `RATE_LIMIT_WINDOW`  | `60`    | Rate-limit window (seconds)                  |
 
 ## Deploy on Render
 

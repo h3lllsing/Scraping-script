@@ -33,6 +33,49 @@ BASE_HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
+_GEO_LOCK = threading.Lock()
+_GEO_LAST_REQ = 0.0
+_GEO_CACHE = {}
+_GEO_CACHE_LOCK = threading.Lock()
+GEO_CACHE_TTL = int(os.environ.get("GEO_CACHE_TTL", "3600"))
+
+
+def geocode(search, limit=6):
+    """Nominatim lookup honoring the 1 req/s policy, with a shared TTL cache so
+    the OSM and Photon scrapers reuse one geocode result per request."""
+    search = (search or "").strip()
+    if not search:
+        return []
+    now = time.monotonic()
+    key = (search.lower(), limit)
+    with _GEO_CACHE_LOCK:
+        hit = _GEO_CACHE.get(key)
+        if hit and now - hit[0] < GEO_CACHE_TTL:
+            return hit[1]
+    with _GEO_LOCK:
+        global _GEO_LAST_REQ
+        delay = 1.05 - (now - _GEO_LAST_REQ)
+        if delay > 0:
+            time.sleep(delay)
+        _GEO_LAST_REQ = time.monotonic()
+    try:
+        r = requests.get(
+            "https://nominatim.openstreetmap.org/search",
+            params={"q": search, "format": "jsonv2", "limit": limit},
+            headers={"User-Agent": USER_AGENT},
+            timeout=REQUEST_TIMEOUT,
+        )
+    except Exception:
+        return []
+    if r.status_code == 403 or r.status_code == 429:
+        return []
+    if r.status_code != 200:
+        return []
+    items = r.json() or []
+    with _GEO_CACHE_LOCK:
+        _GEO_CACHE[key] = (time.monotonic(), items)
+    return items
+
 
 @dataclass
 class Business:
@@ -163,17 +206,7 @@ class OSMScraper(BaseScraper):
 
     @staticmethod
     def _geocode(search):
-        params = {"q": search, "format": "jsonv2", "limit": 6}
-        r = requests.get(
-            "https://nominatim.openstreetmap.org/search",
-            params=params,
-            headers={"User-Agent": USER_AGENT},
-            timeout=REQUEST_TIMEOUT,
-        )
-        if r.status_code == 403:
-            return []
-        r.raise_for_status()
-        return r.json() or []
+        return geocode(search, limit=6)
 
     @staticmethod
     def _bbox_area(item):
@@ -190,7 +223,7 @@ class OSMScraper(BaseScraper):
             if re.search(pattern, q, re.IGNORECASE):
                 return filters
         escaped = re.escape(q)
-        return [f'name~"{escaped}",i']
+        return [f"name~{escaped},i"]
 
     def _build_query(self, query, location, limit, light=False):
         s, n, w, e = self._resolve_bbox(query, location)
@@ -202,7 +235,10 @@ class OSMScraper(BaseScraper):
                 cond = f'["{key}"="{val}"]'
             elif "~" in f:
                 key, val = f.split("~", 1)
-                cond = f'["{key}"~"{val}"]'
+                flag = ",i" if val.endswith(",i") else ""
+                if flag:
+                    val = val[:-2]
+                cond = f'["{key}"~"{val}"{flag}]'
             else:
                 cond = f
             members.append(f"node{cond}({s:.6f},{w:.6f},{n:.6f},{e:.6f})")
@@ -240,6 +276,7 @@ class OSMScraper(BaseScraper):
                 or tags.get("tel")
                 or tags.get("contact:mobile")
             )
+            phone = _clean_phone(phone)
             website = tags.get("website") or tags.get("contact:website") or tags.get("url")
             lat = el.get("lat")
             lon = el.get("lon")
@@ -269,9 +306,10 @@ class OSMScraper(BaseScraper):
                     ep,
                     data={"data": overpass_query},
                     headers={"User-Agent": USER_AGENT},
-                    timeout=min(OVERPASS_DEADLINE, 12),
+                    timeout=min(OVERPASS_DEADLINE, 18),
                 )
                 if r.status_code == 429:
+                    time.sleep(0.6)
                     continue
                 r.raise_for_status()
                 return r.json()
@@ -282,9 +320,18 @@ class OSMScraper(BaseScraper):
     @staticmethod
     def _format_address(tags):
         parts = []
-        for k in ("addr:housenumber", "addr:street", "addr:suburb", "addr:city", "addr:postcode", "addr:country"):
+        for k in (
+            "addr:housenumber",
+            "addr:street",
+            "addr:suburb",
+            "addr:district",
+            "addr:city",
+            "addr:province",
+            "addr:postcode",
+            "addr:country",
+        ):
             v = tags.get(k)
-            if v:
+            if v and v not in parts:
                 parts.append(v)
         return ", ".join(parts) if parts else None
 
@@ -335,19 +382,13 @@ class PhotonScraper(BaseScraper):
 
     def _location_center(self, query, location):
         search = (location or "").strip() or (query or "").strip()
-        r = requests.get(
-            "https://nominatim.openstreetmap.org/search",
-            params={"q": search, "format": "jsonv2", "limit": 1},
-            headers={"User-Agent": USER_AGENT},
-            timeout=REQUEST_TIMEOUT,
-        )
-        if r.status_code == 403:
-            return None
-        r.raise_for_status()
-        items = r.json() or []
+        items = geocode(search, limit=1)
         if not items:
             return None
-        return float(items[0]["lat"]), float(items[0]["lon"])
+        try:
+            return float(items[0]["lat"]), float(items[0]["lon"])
+        except (KeyError, TypeError, ValueError):
+            return None
 
     def scrape(self, query, location, limit):
         center = self._location_center(query, location)
