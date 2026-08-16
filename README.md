@@ -74,7 +74,9 @@ Other endpoints:
   Great for lead-list apps and the automated lead packs.
 - `/categories` — list of all 81 supported business niches (name + keyword pattern)
 - `/leads?query=&location=&limit=` — read collected leads from the Supabase
-  database (only populated once `DATABASE_URL` is configured)
+  database (only populated once `DATABASE_URL` is configured). **Protected**: send
+  the `LEADS_API_KEY` secret as an `X-API-Key` header. If `LEADS_API_KEY` is unset
+  the endpoint is disabled (403) rather than open.
 - `/docs` (Swagger UI)
 
 ## Optional Supabase persistence
@@ -167,6 +169,7 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
 | `RATE_LIMIT_PER_IP`  | `30`    | Max requests per IP per window (`0` = off)   |
 | `RATE_LIMIT_WINDOW`  | `60`    | Rate-limit window (seconds)                  |
 | `DATABASE_URL`       | —       | Supabase/Postgres URL — enables durable cache + leads table |
+| `LEADS_API_KEY`      | —       | Secret required to read `/leads` (`X-API-Key` header); unset = disabled |
 
 ## Deploy on Render
 

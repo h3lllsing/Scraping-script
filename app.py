@@ -6,7 +6,7 @@ import time as _time
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import FastAPI, Query, Request
+from fastapi import FastAPI, Header, Query, Request
 from fastapi.responses import JSONResponse, StreamingResponse
 from cachetools import TTLCache
 
@@ -79,6 +79,8 @@ RATE_LIMIT_WINDOW = float(os.environ.get("RATE_LIMIT_WINDOW", "60"))
 RATE_HITS_MAX = 5000
 _RATE_HITS = {}
 _RATE_LOCK = threading.Lock()
+
+LEADS_API_KEY = os.environ.get("LEADS_API_KEY", "").strip()
 
 
 @app.middleware("http")
@@ -204,12 +206,24 @@ def health(probe: bool = Query(False, description="Run a real mini-scrape agains
     return out
 
 
-@app.get("/leads", summary="Query collected leads from the database (read-only)")
+@app.get("/leads", summary="Query collected leads from the database (read-only, API key required)")
 def lead_store(
     query: Optional[str] = Query(None, description="Filter by business type"),
     location: Optional[str] = Query(None, description="Filter by city/area"),
     limit: int = Query(20, ge=1, le=200, description="Max rows to return (1..200)"),
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
 ):
+    if not LEADS_API_KEY:
+        return JSONResponse(
+            status_code=403,
+            content={"detail": "leads endpoint disabled: set LEADS_API_KEY env var to enable"},
+        )
+    if not x_api_key or x_api_key != LEADS_API_KEY:
+        return JSONResponse(
+            status_code=401,
+            content={"detail": "invalid or missing API key"},
+            headers={"WWW-Authenticate": "ApiKey"},
+        )
     rows = db.recent_leads(
         query=(query or "").strip() or None,
         location=(location or "").strip() or None,

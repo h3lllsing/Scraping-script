@@ -4,8 +4,11 @@ import json
 import time
 import logging
 import threading
+import ipaddress
+import socket
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
+from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -832,6 +835,44 @@ def _haversine(lat1, lon1, lat2, lon2):
     return 6371.0 * 2 * asin(sqrt(a))
 
 
+def _is_safe_url(url):
+    """Reject URLs that point at internal/private/loopback hosts (SSRF guard)."""
+    try:
+        parsed = urlparse(url)
+    except Exception:
+        return False
+    if parsed.scheme not in ("http", "https"):
+        return False
+    host = (parsed.hostname or "").lower().rstrip(".")
+    if not host:
+        return False
+    if host == "localhost" or host.endswith(".local") or host.endswith(".internal"):
+        return False
+    if not re.match(r"^[a-z0-9._-]+$", host):
+        return False
+    if host.count(".") == 0:
+        return False
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except Exception:
+        return False
+    for info in infos:
+        try:
+            ip = ipaddress.ip_address(info[4][0])
+        except ValueError:
+            return False
+        if (
+            ip.is_private
+            or ip.is_loopback
+            or ip.is_link_local
+            or ip.is_reserved
+            or ip.is_multicast
+            or ip.is_unspecified
+        ):
+            return False
+    return True
+
+
 class WebsitePhoneEnricher:
     def __init__(self):
         self._osm_rate_lock = threading.Lock()
@@ -923,25 +964,38 @@ class WebsitePhoneEnricher:
     @staticmethod
     def _fetch(url):
         try:
-            r = requests.get(
-                url,
-                headers={"User-Agent": USER_AGENT},
-                timeout=7,
-                stream=True,
-                allow_redirects=True,
-            )
-            if r.status_code != 200:
-                return None
-            chunks = []
-            total = 0
-            for chunk in r.iter_content(65536):
-                chunks.append(chunk)
-                total += len(chunk)
-                if total > 350000:
-                    break
-            return b"".join(chunks).decode("utf-8", errors="ignore")
+            current = url
+            with requests.Session() as s:
+                for _ in range(4):
+                    if not _is_safe_url(current):
+                        return None
+                    r = s.get(
+                        current,
+                        headers={"User-Agent": USER_AGENT},
+                        timeout=7,
+                        stream=True,
+                        allow_redirects=False,
+                    )
+                    if r.status_code in (301, 302, 303, 307, 308):
+                        loc = r.headers.get("Location")
+                        r.close()
+                        if not loc:
+                            return None
+                        current = requests.utils.urljoin(current, loc)
+                        continue
+                    if r.status_code != 200:
+                        return None
+                    chunks = []
+                    total = 0
+                    for chunk in r.iter_content(65536):
+                        chunks.append(chunk)
+                        total += len(chunk)
+                        if total > 350000:
+                            break
+                    return b"".join(chunks).decode("utf-8", errors="ignore")
         except Exception:
             return None
+        return None
 
 
 def dedupe(businesses):

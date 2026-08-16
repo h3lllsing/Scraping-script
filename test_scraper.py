@@ -442,10 +442,88 @@ class TestDbWiring(unittest.TestCase):
                 return [{"name": "X", "phone": "1"}]
 
         fake = FakeDb()
-        with mock.patch.object(app, "db", fake):
-            out = app.lead_store(query="hotel", location="Dubai", limit=5)
+        with mock.patch.object(app, "db", fake), mock.patch.object(app, "LEADS_API_KEY", "sekrit"):
+            out = app.lead_store(query="hotel", location="Dubai", limit=5, x_api_key="sekrit")
         self.assertEqual(out["count"], 1)
         self.assertEqual(fake.calls, ("hotel", "Dubai", 5))
+
+    def test_lead_store_rejects_missing_key(self):
+        import app
+
+        with mock.patch.object(app, "LEADS_API_KEY", "sekrit"):
+            resp = app.lead_store(query="hotel", location="Dubai", limit=5)
+        self.assertEqual(resp.status_code, 401)
+
+    def test_lead_store_rejects_wrong_key(self):
+        import app
+
+        with mock.patch.object(app, "LEADS_API_KEY", "sekrit"):
+            resp = app.lead_store(query="hotel", location="Dubai", limit=5, x_api_key="nope")
+        self.assertEqual(resp.status_code, 401)
+
+    def test_lead_store_disabled_when_no_key(self):
+        import app
+
+        with mock.patch.object(app, "LEADS_API_KEY", ""):
+            resp = app.lead_store(query="hotel", location="Dubai", limit=5)
+        self.assertEqual(resp.status_code, 403)
+
+
+class TestSSRFGuard(unittest.TestCase):
+    def test_blocks_internal(self):
+        for url in (
+            "http://localhost:8080/x",
+            "http://127.0.0.1/x",
+            "http://10.0.0.5/",
+            "http://192.168.1.1/",
+            "http://169.254.169.254/latest/meta-data/",
+            "http://[::1]/x",
+            "http://intranet/",
+            "ftp://example.com/",
+            "http://foo.internal/",
+            "https://foo.local/x",
+        ):
+            self.assertFalse(scraper._is_safe_url(url), url)
+
+    def test_accepts_public(self):
+        with mock.patch.object(
+            scraper.socket,
+            "getaddrinfo",
+            return_value=[(2, 1, 6, "", ("93.184.216.34", 0))],
+        ):
+            self.assertTrue(scraper._is_safe_url("https://example.com/"))
+            self.assertTrue(scraper._is_safe_url("https://www.some-business.co.uk/page"))
+
+    def test_fetch_blocks_internal_redirect(self):
+        e = WebsitePhoneEnricher()
+
+        class FakeResp:
+            status_code = 302
+            headers = {"Location": "http://127.0.0.1/secret"}
+
+            def close(self):
+                pass
+
+            def iter_content(self, *a):
+                return []
+
+        class FakeSession:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+            def get(self, *a, **k):
+                return FakeResp()
+
+        with mock.patch.object(scraper.requests, "Session", FakeSession):
+            self.assertIsNone(e._fetch("https://public.example.com/"))
+
+    def test_fetch_rejects_non_http(self):
+        e = WebsitePhoneEnricher()
+        with mock.patch.object(scraper, "_is_safe_url", return_value=False):
+            self.assertIsNone(e._fetch("file:///etc/passwd"))
 
 
 class TestLeadpack(unittest.TestCase):
