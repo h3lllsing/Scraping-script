@@ -59,6 +59,7 @@ Example response (truncated):
 | `limit`      | int     | `20`                        | Max results (`1..50`).                                             |
 | `sources`    | str     | `openstreetmap,photon`      | Comma list: `openstreetmap`, `photon`, `google_maps`, `auto`.      |
 | `phone_only` | bool    | `false`                     | Return only records that have a phone number.                      |
+| `enrich`     | bool    | `true`                      | Try to find phone numbers from the business's own website (free).  |
 
 Other endpoints: `/` (usage), `/health`, `/docs` (Swagger UI).
 
@@ -77,6 +78,22 @@ Other endpoints: `/` (usage), `/health`, `/docs` (Swagger UI).
   because results are JS-rendered; included for completeness when you set
   `sources=google_maps`. Scraping Google Maps violates its ToS — use with caution.
 
+### Free phone enrichment (default ON)
+
+Since OSM phone tags are sparse, the app tries to pull phone numbers from the
+business's **own website** — 100% free, no keys, no card, no ToS issue:
+
+1. A business that has a `website` (from OSM tags) or an OSM id/photon hit is picked.
+2. For Photon results the website is resolved via the public OSM API
+   (rate-limited to 1 req/s).
+3. The site is fetched and a phone is extracted from `tel:` links,
+   schema.org `itemprop="telephone"`, JSON-LD, and text patterns.
+
+Pass `enrich=false` to disable. `phones_enriched` in the response counts how many
+phones came from this pass, and results carry `extra.phone_via` (`website` vs `osm_tag`).
+Coverage grows with OSM `website` tags — most effective for businesses that list a
+phone on their site (small/medium businesses, hotels, clinics, workshops...).
+
 ### Phone numbers: the honest picture
 
 Phones come from OpenStreetMap tags, which are sparse (10–25 % of mapped
@@ -94,6 +111,9 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
 | `OVERPASS_RETRIES`   | `1`     | Extra lighter retry passes after failure    |
 | `MAX_BBOX_DEG`       | `1.3`   | Cap on geocoded bounding-box size (degrees) |
 | `MAX_PHOTON_KM`      | `120`   | Drop Photon hits farther than this (km)     |
+| `ENRICH_MAX_SITES`   | `10`    | Max websites fetched per request            |
+| `ENRICH_USE_OSM_API` | `1`     | Resolve Photon websites via OSM API (`0/1`) |
+| `ENRICH_DEFAULT`     | `1`     | Default for the `enrich` query param        |
 
 ## Deploy on Render
 

@@ -38,6 +38,9 @@ def scrape(
         description="Comma-separated source list: openstreetmap, photon, google_maps, auto",
     ),
     phone_only: bool = Query(False, description="Return only businesses that have a phone number"),
+    enrich: bool = Query(
+        True, description="Try to find phone numbers on the business's own website (free)"
+    ),
 ):
     cache_key = (
         query.strip().lower(),
@@ -45,17 +48,19 @@ def scrape(
         min(limit, 50),
         sources.strip().lower(),
         phone_only,
+        enrich,
     )
     hit = CACHE.get(cache_key)
     if hit is not None:
         return hit
 
-    results, sources_status = search_all(
+    results, sources_status, enriched = search_all(
         query=query,
         location=location or "",
         limit=limit,
         sources=sources,
         phone_only=phone_only,
+        enrich=enrich,
     )
 
     payload = {
@@ -64,6 +69,8 @@ def scrape(
         "limit": limit,
         "count": len(results),
         "phone_only": phone_only,
+        "enrich": enrich,
+        "phones_enriched": enriched,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "results": [b.as_dict() for b in results],
         "sources": sources_status,

@@ -2,6 +2,8 @@ import os
 import re
 import json
 import time
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
 
 import requests
@@ -18,9 +20,12 @@ OVER_PASS_ENDPOINTS = [
     "https://overpass.kumi.systems/api/interpreter",
     "https://overpass.private.coffee/api/interpreter",
 ]
-OVERPASS_DEADLINE = int(os.environ.get("OVERPASS_DEADLINE", "45"))
+OVERPASS_DEADLINE = int(os.environ.get("OVERPASS_DEADLINE", "25"))
 MAX_BBOX_DEG = float(os.environ.get("MAX_BBOX_DEG", "1.3"))
 OVERPASS_RETRIES = int(os.environ.get("OVERPASS_RETRIES", "1"))
+ENRICH_MAX_SITES = int(os.environ.get("ENRICH_MAX_SITES", "10"))
+ENRICH_USE_OSM_API = os.environ.get("ENRICH_USE_OSM_API", "1") == "1"
+ENRICH_DEFAULT = os.environ.get("ENRICH_DEFAULT", "1") == "1"
 
 BASE_HEADERS = {
     "User-Agent": USER_AGENT,
@@ -127,6 +132,16 @@ TAG_RULES = [
 
 FALLBACK_GENERIC_KEYS = "amenity|shop|office|tourism|leisure|craft|highway|railway"
 
+PHONE_TEXT_RE = re.compile(
+    r"(?:(?:\+?\d{1,4})[\s\-().]*)?"
+    r"(?:\(\d{2,5}\)[\s\-().]*|\d{2,5}[\s\-().]{0,2})\d{3}[\s\-().]{0,2}\d{3,4}[\s\-().]{0,2}\d{0,4}"
+)
+
+SOCIAL_DOMAINS = (
+    "facebook.com", "instagram.com", "linkedin.com", "twitter.com", "x.com",
+    "tiktok.com", "youtube.com", "wa.me", "t.me", "snapchat.com", "pinterest.com",
+)
+
 
 class OSMScraper(BaseScraper):
     source = "openstreetmap"
@@ -205,8 +220,9 @@ class OSMScraper(BaseScraper):
         )
 
     def scrape(self, query, location, limit):
+        t0 = time.monotonic()
         data = self._run_overpass(query, location, limit)
-        if data is None and OVERPASS_RETRIES > 0:
+        if data is None and OVERPASS_RETRIES > 0 and (time.monotonic() - t0) < 20:
             data = self._run_overpass(query, location, limit, light=True)
         if data is None:
             raise SourceError("openstreetmap source unreachable (timeout or rate limited)")
@@ -246,13 +262,14 @@ class OSMScraper(BaseScraper):
 
     def _run_overpass(self, query, location, limit, light=False):
         overpass_query = self._build_query(query, location, limit, light=light)
-        for ep in OVER_PASS_ENDPOINTS:
+        endpoints = OVER_PASS_ENDPOINTS[:2] if light else OVER_PASS_ENDPOINTS
+        for ep in endpoints:
             try:
                 r = requests.post(
                     ep,
                     data={"data": overpass_query},
                     headers={"User-Agent": USER_AGENT},
-                    timeout=min(OVERPASS_DEADLINE, 30),
+                    timeout=min(OVERPASS_DEADLINE, 12),
                 )
                 if r.status_code == 429:
                     continue
@@ -564,6 +581,73 @@ class GoogleMapsScraper(BaseScraper):
         return None
 
 
+def _clean_phone(raw):
+    if not raw:
+        return None
+    digits = re.sub(r"[^\d]", "", raw or "")
+    if not digits or not (7 <= len(digits) <= 15):
+        return None
+    return ("+" + digits) if str(raw).strip().startswith("+") else digits
+
+
+def extract_phone_from_html(html):
+    if not html:
+        return None
+    soup = BeautifulSoup(html, "html.parser")
+    candidates = []
+
+    for a in soup.select('a[href*="tel:"]'):
+        href = a.get("href", "")
+        m = re.search(r"tel:([+0-9\s\-().]+)", href)
+        if m:
+            candidates.append(m.group(1))
+        txt = a.get_text(strip=True)
+        if re.search(r"\d", txt):
+            candidates.append(txt)
+
+    for el in soup.select(
+        '[itemprop="telephone"], meta[name="telephone"], meta[property="telephone"]'
+    ):
+        candidates.append(el.get("content") or el.get_text(strip=True))
+
+    for sc in soup.select('script[type="application/ld+json"]'):
+        text = (sc.string or sc.get_text() or "")
+        try:
+            payload = json.loads(text)
+            for item in _walk_ld(payload):
+                tel = item.get("telephone") if isinstance(item, dict) else None
+                if isinstance(tel, str):
+                    candidates.append(tel)
+        except Exception:
+            for m in re.finditer(r'"telephone"\s*:\s*"([^"]*)"', text):
+                candidates.append(m.group(1))
+            for m in re.finditer(r'"telephone"\s*:\s*(\+?[\d\s\-()]+)', text):
+                candidates.append(m.group(1))
+
+    for c in candidates:
+        clean = _clean_phone(c)
+        if clean:
+            return clean
+
+    body = soup.get_text(" ", strip=True)
+    if body:
+        for m in re.finditer(PHONE_TEXT_RE, body[:60000]):
+            clean = _clean_phone(m.group(0))
+            if clean:
+                return clean
+    return None
+
+
+def _walk_ld(node):
+    if isinstance(node, dict):
+        yield node
+        for v in node.values():
+            yield from _walk_ld(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _walk_ld(v)
+
+
 def _haversine(lat1, lon1, lat2, lon2):
     from math import radians, sin, cos, asin, sqrt
 
@@ -571,6 +655,115 @@ def _haversine(lat1, lon1, lat2, lon2):
     dlat, dlon = rlat2 - rlat1, rlon2 - rlon1
     a = sin(dlat / 2) ** 2 + cos(rlat1) * cos(rlat2) * sin(dlon / 2) ** 2
     return 6371.0 * 2 * asin(sqrt(a))
+
+
+class WebsitePhoneEnricher:
+    def __init__(self):
+        self._osm_rate_lock = threading.Lock()
+        self._last_osm_req = 0.0
+
+    def enrich(self, businesses, max_sites=None):
+        max_sites = max_sites if max_sites is not None else ENRICH_MAX_SITES
+        targets = []
+        for b in businesses:
+            if b.phone:
+                continue
+            if b.website or (
+                ENRICH_USE_OSM_API and b.extra.get("osm_type") and b.extra.get("osm_id")
+            ):
+                targets.append(b)
+        targets = targets[:max_sites]
+        if not targets:
+            return businesses
+
+        with ThreadPoolExecutor(max_workers=min(4, len(targets))) as ex:
+            futures = {ex.submit(self._process, b): b for b in targets}
+            for fut in as_completed(futures):
+                try:
+                    fut.result()
+                except Exception:
+                    pass
+        return businesses
+
+    def _process(self, b):
+        if b.phone:
+            return
+        if not b.website:
+            b.website = self._osm_website(
+                b.extra.get("osm_type"), b.extra.get("osm_id")
+            )
+        if not b.website or self._is_social(b.website):
+            return
+        html = self._fetch(self._normalize_url(b.website))
+        if not html:
+            return
+        phone = extract_phone_from_html(html)
+        if phone:
+            b.phone = phone
+            b.extra["phone_via"] = "website"
+
+    @staticmethod
+    def _is_social(url):
+        return any(d in url.lower() for d in SOCIAL_DOMAINS)
+
+    @staticmethod
+    def _normalize_url(url):
+        url = url.strip()
+        if "//" not in url:
+            url = "https://" + url
+        return url
+
+    def _osm_website(self, otype, oid):
+        if not otype or not oid:
+            return None
+        mapped = {"N": "node", "W": "way", "R": "relation"}.get(str(otype).upper(), str(otype))
+        if mapped not in ("node", "way", "relation"):
+            return None
+        with self._osm_rate_lock:
+            delay = 1.0 - (time.monotonic() - self._last_osm_req)
+            if delay > 0:
+                time.sleep(delay)
+            self._last_osm_req = time.monotonic()
+        try:
+            r = requests.get(
+                f"https://api.openstreetmap.org/api/0.6/{mapped}/{int(oid)}.json",
+                headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+                timeout=10,
+            )
+            if r.status_code != 200:
+                return None
+            el = (r.json().get("elements") or [{}])[0]
+            tags = el.get("tags") or {}
+            return (
+                tags.get("website")
+                or tags.get("contact:website")
+                or tags.get("url")
+            )
+        except Exception:
+            return None
+
+    @staticmethod
+    def _fetch(url):
+        try:
+            r = requests.get(
+                url,
+                headers={"User-Agent": USER_AGENT},
+                timeout=7,
+                stream=True,
+                allow_redirects=True,
+            )
+            if r.status_code != 200:
+                return None
+            chunks = []
+            total = 0
+            for chunk in r.iter_content(65536):
+                chunks.append(chunk)
+                total += len(chunk)
+                if total > 350000:
+                    break
+            return b"".join(chunks).decode("utf-8", errors="ignore")
+        except Exception:
+            return None
 
 
 def dedupe(businesses):
@@ -588,10 +781,12 @@ def dedupe(businesses):
     return out
 
 
-def search_all(query, location, limit=20, sources=None, phone_only=False):
+def search_all(query, location, limit=20, sources=None, phone_only=False, enrich=None):
     query = (query or "").strip()
     location = (location or "").strip()
     limit = max(1, min(int(limit or 20), 50))
+    if enrich is None:
+        enrich = ENRICH_DEFAULT
     requested = [s.strip().lower() for s in (sources or "").split(",") if s.strip()]
     if not requested or requested == ["auto"]:
         requested = ["openstreetmap", "photon"]
@@ -603,19 +798,33 @@ def search_all(query, location, limit=20, sources=None, phone_only=False):
     }
     by_source = {k: {"status": "ok", "error": None, "service": k} for k in requested}
 
-    all_businesses = []
-    for name in requested:
+    def run_one(name):
         scraper = scrapers.get(name)
         if scraper is None:
             by_source[name] = {"status": "error", "error": "unknown source", "service": name}
-            continue
+            return name, []
         try:
             items = scraper.scrape(query, location, limit)
-            if phone_only:
-                items = [b for b in items if b.phone]
-            all_businesses.extend(items)
+            by_source[name] = {"status": "ok", "error": None, "service": name}
+            return name, items
         except Exception as exc:
             by_source[name] = {"status": "error", "error": str(exc)[:300], "service": name}
+            return name, []
+
+    all_businesses = []
+    if requested:
+        with ThreadPoolExecutor(max_workers=min(len(requested), 4)) as ex:
+            futures = [ex.submit(run_one, name) for name in requested]
+            for fut in as_completed(futures):
+                _, items = fut.result()
+                all_businesses.extend(items)
 
     merged = dedupe(all_businesses)
-    return merged[:limit], by_source
+    enriched_count = 0
+    if enrich:
+        before = sum(1 for b in merged if b.phone)
+        merged = WebsitePhoneEnricher().enrich(merged)
+        enriched_count = sum(1 for b in merged if b.phone) - before
+    if phone_only:
+        merged = [b for b in merged if b.phone]
+    return merged[:limit], by_source, enriched_count
