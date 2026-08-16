@@ -1,9 +1,302 @@
 [
-  {"city": "Karachi", "query": "RealEstate", "limit": 50},
-  {"city": "Karachi", "query": "restaurant", "limit": 50},
-  {"city": "Karachi", "query": "hospital", "limit": 50},
-  {"city": "Lahore", "query": "RealEstate", "limit": 50},
-  {"city": "Lahore", "query": "restaurant", "limit": 50},
-  {"city": "Islamabad", "query": "RealEstate", "limit": 50},
-  {"city": "Islamabad", "query": "restaurant", "limit": 50}
+  {
+    "city": "New York",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "New York",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "New York",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "New York",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "New York",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Los Angeles",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Los Angeles",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Los Angeles",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Los Angeles",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Los Angeles",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Chicago",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Chicago",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Chicago",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Chicago",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Chicago",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Miami",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Miami",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Miami",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Miami",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Miami",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Austin",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Austin",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Austin",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Austin",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Austin",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "London",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "London",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "London",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "London",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "London",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Manchester",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Manchester",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Manchester",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Manchester",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Manchester",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Berlin",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Berlin",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Berlin",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Berlin",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Berlin",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Toronto",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Toronto",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Toronto",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Toronto",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Toronto",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Vancouver",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Vancouver",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Vancouver",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Vancouver",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Vancouver",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Sydney",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Sydney",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Sydney",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Sydney",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Sydney",
+    "query": "gym",
+    "limit": 50
+  },
+  {
+    "city": "Dubai",
+    "query": "RealEstate",
+    "limit": 50
+  },
+  {
+    "city": "Dubai",
+    "query": "restaurant",
+    "limit": 50
+  },
+  {
+    "city": "Dubai",
+    "query": "Hotel",
+    "limit": 50
+  },
+  {
+    "city": "Dubai",
+    "query": "dentist",
+    "limit": 50
+  },
+  {
+    "city": "Dubai",
+    "query": "gym",
+    "limit": 50
+  }
 ]

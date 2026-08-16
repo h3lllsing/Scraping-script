@@ -3,6 +3,7 @@ import datetime
 import json
 import os
 import sys
+import time
 import urllib.parse
 import urllib.request
 
@@ -109,12 +110,26 @@ def main():
         print("usage: --all | (--query X --location Y [--limit N]) [--base URL]")
         sys.exit(1)
 
-    for q, c, n in ops:
+    today_stamp = datetime.date.today().isoformat()
+    if os.path.isdir(OUT_DIR):
+        for name in os.listdir(OUT_DIR):
+            if name.endswith(".csv") and today_stamp not in name:
+                try:
+                    os.remove(os.path.join(OUT_DIR, name))
+                except OSError:
+                    pass
+
+    fail = 0
+    for i, (q, c, n) in enumerate(ops):
         try:
             info = write_leadpack(q, c, n)
-            print(f"OK {q:12s} {c:10s} rows={info['rows']:3d} phones={info['phones']:3d} -> {info['path']}")
+            print(f"OK {q:12s} {c:12s} rows={info['rows']:3d} phones={info['phones']:3d} -> {info['path']}")
         except Exception as exc:
-            print(f"FAIL {q:12s} {c:10s} {str(exc)[:140]}")
+            fail += 1
+            print(f"FAIL {q:12s} {c:12s} {str(exc)[:140]}")
+        if i < len(ops) - 1:
+            time.sleep(2)
+    print(f"done: {len(ops) - fail}/{len(ops)} packs ok")
 
 
 if __name__ == "__main__":

@@ -138,7 +138,11 @@ so every CSV gets a permanent public URL:
 https://raw.githubusercontent.com/h3lllsing/Scraping-script/main/docs/leads/<city>_<query>-<YYYY-MM-DD>.csv
 ```
 
-- Edit `leadpacks.json` to change which niche × city packs to build.
+- Edit `leadpacks.json` to change which niche × city packs to build. The default
+  roster is 12 worldwide cities × 5 high-demand niches (RealEstate, restaurant,
+  Hotel, dentist, gym) = 60 daily packs. Add cities/niches freely — in
+  North-America/UK/AU/EU cities OSM phone & website tags are much richer, so
+  those packs contain far more real phone numbers than South-Asian ones.
 - Trigger manually: GitHub → **Actions → Lead Packs → Run workflow**.
 - Run locally: `python generate_leadpack.py --query restaurant --location Karachi`
   (or `--all`). Set `LEADPACK_API` to point at any instance of this app.
