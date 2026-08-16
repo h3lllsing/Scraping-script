@@ -1,0 +1,9 @@
+[
+  {"city": "Karachi", "query": "RealEstate", "limit": 50},
+  {"city": "Karachi", "query": "restaurant", "limit": 50},
+  {"city": "Karachi", "query": "hospital", "limit": 50},
+  {"city": "Lahore", "query": "RealEstate", "limit": 50},
+  {"city": "Lahore", "query": "restaurant", "limit": 50},
+  {"city": "Islamabad", "query": "RealEstate", "limit": 50},
+  {"city": "Islamabad", "query": "restaurant", "limit": 50}
+]

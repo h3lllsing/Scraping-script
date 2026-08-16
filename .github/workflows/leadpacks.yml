@@ -1,0 +1,38 @@
+name: Lead Packs
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/leadpacks.yml"
+      - "generate_leadpack.py"
+      - "leadpacks.json"
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate lead packs
+        run: python generate_leadpack.py --all
+        env:
+          LEADPACK_API: "https://scraping-script-xi.vercel.app"
+
+      - name: Commit lead packs
+        run: |
+          git config user.name "h3lllsing"
+          git config user.email "h3lllsing@users.noreply.github.com"
+          git add docs/leads
+          git commit -m "chore: refresh lead packs $(date -u +%F)" || echo "no changes"
+          git push
