@@ -124,10 +124,20 @@ class TestOsmQuery(unittest.TestCase):
         q = self.scraper._build_query("Roofer", "London", 20)
         self.assertIn('node["craft"="roofer"]', q)
 
+    def test_shoe_maker_matches_footwear_rule(self):
+        q = self.scraper._build_query("Shoe maker", "Karachi", 20)
+        self.assertIn('node["shop"="shoes"]', q)
+
+    def test_shoe_store_matches_footwear_rule(self):
+        q = self.scraper._build_query("shoe store", "Karachi", 20)
+        self.assertIn('node["shop"="shoes"]', q)
+
     def test_mapped_tag_longest_match(self):
         self.assertEqual(PhotonScraper._mapped_tag("Parking"), ("amenity", "parking"))
         self.assertEqual(PhotonScraper._mapped_tag("Park"), ("leisure", "park"))
         self.assertEqual(PhotonScraper._mapped_tag("Hospital"), ("amenity", "hospital"))
+        self.assertEqual(PhotonScraper._mapped_tag("shoe maker"), ("shop", "shoes"))
+        self.assertEqual(PhotonScraper._mapped_tag("Shoes"), ("shop", "shoes"))
         self.assertIsNone(PhotonScraper._mapped_tag("software"))
 
     def test_unknown_source(self):
