@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from cachetools import TTLCache
 
 from scraper import MAX_RESULTS, TAG_RULES, OSMScraper, PhotonScraper, search_all
+import db
 
 app = FastAPI(
     title="Business Directory Scraper API",
@@ -43,6 +44,35 @@ app = FastAPI(
 
 CACHE = TTLCache(maxsize=256, ttl=600)
 CACHE_LOCK = threading.Lock()
+
+
+@app.on_event("startup")
+def _startup_db():
+    try:
+        db.init_db()
+    except Exception as exc:  # pragma: no cover
+        print(f"[startup] db init failed: {exc}", flush=True)
+
+
+def _cache_get(key):
+    with CACHE_LOCK:
+        hit = CACHE.get(key)
+        if hit is not None:
+            return hit
+    if db.configured:
+        hit = db.cache_get(key)
+        if hit is not None:
+            with CACHE_LOCK:
+                CACHE[key] = hit
+            return hit
+    return None
+
+
+def _cache_store(key, payload, ttl=600):
+    with CACHE_LOCK:
+        CACHE[key] = payload
+    if db.configured:
+        db.cache_set(key, payload, ttl=ttl)
 
 RATE_LIMIT_PER_IP = int(os.environ.get("RATE_LIMIT_PER_IP", "30"))
 RATE_LIMIT_WINDOW = float(os.environ.get("RATE_LIMIT_WINDOW", "60"))
@@ -122,10 +152,9 @@ def scrape(
         phone_only,
         enrich,
     )
-    with CACHE_LOCK:
-        hit = CACHE.get(cache_key)
-        if hit is not None:
-            return hit
+    hit = _cache_get(cache_key)
+    if hit is not None:
+        return hit
 
     results, sources_status, enriched = search_all(
         query=query,
@@ -148,7 +177,9 @@ def scrape(
         "results": [b.as_dict() for b in results],
         "sources": sources_status,
     }
-    CACHE[cache_key] = payload
+    _cache_store(cache_key, payload)
+    if db.configured:
+        db.insert_leads(query.strip(), (location or "").strip(), results)
     return payload
 
 
@@ -169,7 +200,22 @@ def health(probe: bool = Query(False, description="Run a real mini-scrape agains
         out["probe"] = True
         out["sources"] = probes
         out["status"] = "ok" if all(v == "ok" for v in probes.values()) else "degraded"
+    out["database"] = db.db_status()
     return out
+
+
+@app.get("/leads", summary="Query collected leads from the database (read-only)")
+def lead_store(
+    query: Optional[str] = Query(None, description="Filter by business type"),
+    location: Optional[str] = Query(None, description="Filter by city/area"),
+    limit: int = Query(20, ge=1, le=200, description="Max rows to return (1..200)"),
+):
+    rows = db.recent_leads(
+        query=(query or "").strip() or None,
+        location=(location or "").strip() or None,
+        limit=limit,
+    )
+    return {"count": len(rows), "database": db.configured, "leads": rows}
 
 
 def _slug(text):
@@ -218,21 +264,20 @@ def export_csv(
         phone_only,
         enrich,
     )
-    with CACHE_LOCK:
-        hit = CACHE.get(cache_key)
-        if hit is not None:
-            content = hit
-        else:
-            results, _, _ = search_all(
-                query=query,
-                location=location or "",
-                limit=limit,
-                sources=sources,
-                phone_only=phone_only,
-                enrich=enrich,
-            )
-            content = _build_csv(results)
-            CACHE[cache_key] = content
+    hit = _cache_get(cache_key)
+    if hit is not None:
+        content = hit
+    else:
+        results, _, _ = search_all(
+            query=query,
+            location=location or "",
+            limit=limit,
+            sources=sources,
+            phone_only=phone_only,
+            enrich=enrich,
+        )
+        content = _build_csv(results)
+        _cache_store(cache_key, content)
     filename = f"leads-{_slug(query)}-{_slug(location or 'world')}-{datetime.now(timezone.utc).date().isoformat()}.csv"
     return StreamingResponse(
         iter([content]),

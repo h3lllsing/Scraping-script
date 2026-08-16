@@ -165,6 +165,25 @@ class TestEnricher(unittest.TestCase):
         self.assertIsNone(b.phone)
 
 
+class FakeNoDb:
+    configured = False
+
+    def cache_get(self, key):
+        return None
+
+    def cache_set(self, *a, **k):
+        pass
+
+    def insert_leads(self, *a, **k):
+        return 0
+
+    def recent_leads(self, *a, **k):
+        return []
+
+    def db_status(self):
+        return {"configured": False, "status": "not configured"}
+
+
 class TestApp(unittest.TestCase):
     def test_scrape_payload(self):
         import app
@@ -172,7 +191,9 @@ class TestApp(unittest.TestCase):
         sample = Business(name="Grand", phone="2124906650", address="NYC", source="photon")
         with mock.patch.object(
             app, "search_all", return_value=([sample], {"photon": {"status": "ok"}}, 0)
-        ), mock.patch.object(app, "CACHE", TTLCache(maxsize=8, ttl=60)):
+        ), mock.patch.object(app, "db", FakeNoDb()), mock.patch.object(
+            app, "CACHE", TTLCache(maxsize=8, ttl=60)
+        ):
             payload = app.scrape(
                 query="restaurant", location="New York", limit=10,
                 sources="auto", phone_only=False, enrich=True,
@@ -344,7 +365,87 @@ class TestHealthProbe(unittest.TestCase):
     def test_health_plain(self):
         import app
 
-        self.assertEqual(app.health(probe=False), {"status": "ok", "probe": False})
+        out = app.health(probe=False)
+        self.assertEqual(out["status"], "ok")
+        self.assertFalse(out["probe"])
+        self.assertIn("database", out)
+
+
+class TestDbDegradation(unittest.TestCase):
+    def test_no_db_noops(self):
+        db = __import__("db", fromlist=["db"])
+        with mock.patch.object(db, "configured", False):
+            self.assertIsNone(db.cache_get("k"))
+            db.cache_set("k", {"a": 1})
+            self.assertEqual(db.insert_leads("q", "l", []), 0)
+            self.assertEqual(db.recent_leads(), [])
+            status = db.db_status()
+            self.assertFalse(status["configured"])
+
+    def test_configured_true_without_psycopg_falls_back(self):
+        db = __import__("db", fromlist=["db"])
+        with mock.patch.object(db, "configured", True), mock.patch.object(
+            db, "_psycopg", None
+        ):
+            self.assertIsNone(db.cache_get("k"))
+            status = db.db_status()
+            self.assertTrue(status["configured"])
+            self.assertEqual(status["status"], "error")
+
+
+class TestDbWiring(unittest.TestCase):
+    def test_scrape_persists_to_db_and_seeds_memory(self):
+        import app
+
+        sample = Business(name="Grand", phone="2124906650", address="NYC", source="photon")
+
+        class FakeDb:
+            configured = True
+            calls = {"set": [], "insert": [], "get": []}
+
+            def cache_get(self, key):
+                self.calls["get"].append(key)
+                return None
+
+            def cache_set(self, key, payload, ttl=600):
+                self.calls["set"].append(key)
+
+            def insert_leads(self, q, loc, businesses):
+                self.calls["insert"].append((q, loc, len(businesses)))
+
+            def db_status(self):
+                return {"configured": True, "status": "ok"}
+
+        fake = FakeDb()
+        with mock.patch.object(app, "db", fake), mock.patch.object(
+            app, "CACHE", TTLCache(maxsize=8, ttl=60)
+        ), mock.patch.object(app, "search_all", return_value=([sample], {"p": {"status": "ok"}}, 0)) as m_search:
+            p1 = app.scrape(query="restaurant", location="New York", limit=10,
+                            sources="auto", phone_only=False, enrich=True)
+            p2 = app.scrape(query="restaurant", location="New York", limit=10,
+                            sources="auto", phone_only=False, enrich=True)
+            self.assertEqual(p1["count"], 1)
+            self.assertEqual(p2, p1)
+            self.assertEqual(m_search.call_count, 1)
+            self.assertEqual(len(fake.calls["insert"]), 1)
+            self.assertEqual(fake.calls["insert"][0][:2], ("restaurant", "New York"))
+            self.assertEqual(len(fake.calls["set"]), 1)
+
+    def test_lead_store_endpoint(self):
+        import app
+
+        class FakeDb:
+            configured = True
+
+            def recent_leads(self, query=None, location=None, limit=20):
+                self.calls = (query, location, limit)
+                return [{"name": "X", "phone": "1"}]
+
+        fake = FakeDb()
+        with mock.patch.object(app, "db", fake):
+            out = app.lead_store(query="hotel", location="Dubai", limit=5)
+        self.assertEqual(out["count"], 1)
+        self.assertEqual(fake.calls, ("hotel", "Dubai", 5))
 
 
 class TestLeadpack(unittest.TestCase):
