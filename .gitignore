@@ -9,3 +9,5 @@ cookies.txt
 sso_cookies.txt
 login_resp.html
 gaming-tweaks-guide.md
+.vercel
+.env*
