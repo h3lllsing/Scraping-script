@@ -67,12 +67,33 @@ Example response (truncated):
 Other endpoints:
 - `/` (usage)
 - `/health` (liveness) — add `?probe=1` to run a real mini-scrape against the
-  upstream sources and report each one's status (all sources `ok`/`empty`/`error`)
+  upstream sources and report each one's status (all sources `ok`/`empty`/`error`).
+  Also reports `database` status when Supabase is configured.
 - `/export.csv` — same query params as `/scrape`, but returns a CSV download
   (`Content-Disposition: attachment`). Results are cached per query+location.
   Great for lead-list apps and the automated lead packs.
 - `/categories` — list of all 81 supported business niches (name + keyword pattern)
+- `/leads?query=&location=&limit=` — read collected leads from the Supabase
+  database (only populated once `DATABASE_URL` is configured)
 - `/docs` (Swagger UI)
+
+## Optional Supabase persistence
+
+Set the `DATABASE_URL` env var (e.g. Supabase session-pooler string) and the app
+gains durable storage on top of the in-memory cache:
+
+| What | Benefit |
+|------|---------|
+| `scrape_cache` table | Cold-start timeouts vanish — a cached scrape survives instance restarts, shared across all serverless instances |
+| `leads` table | Every scraped business is stored (deduped per query+name+address) — build lead packs or a queryable lead DB |
+| `/leads` + `/health` database status | Read back collected leads; verify DB health |
+
+Without `DATABASE_URL` everything degrades gracefully to the in-memory cache — no
+crash, no setup required. Pooler format:
+
+```
+DATABASE_URL=postgresql://postgres.<ref>:<password>@aws-<N>-<region>.pooler.supabase.com:5432/postgres
+```
 
 ## Enrichment fields
 
@@ -145,6 +166,7 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
 | `GEO_CACHE_TTL`      | `3600`  | Cache TTL (s) for Nominatim geocoding        |
 | `RATE_LIMIT_PER_IP`  | `30`    | Max requests per IP per window (`0` = off)   |
 | `RATE_LIMIT_WINDOW`  | `60`    | Rate-limit window (seconds)                  |
+| `DATABASE_URL`       | —       | Supabase/Postgres URL — enables durable cache + leads table |
 
 ## Deploy on Render
 
