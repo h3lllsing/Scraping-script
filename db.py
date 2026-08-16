@@ -9,6 +9,7 @@ logger = logging.getLogger("db")
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 configured = bool(DATABASE_URL)
+import_error = None
 
 _psycopg = None
 if configured:
@@ -18,7 +19,8 @@ if configured:
 
         _psycopg = psycopg2
     except Exception as exc:  # pragma: no cover
-        logger.error("DATABASE_URL set but psycopg2 unavailable: %s", exc)
+        import_error = str(exc)[:300]
+        logger.error("DATABASE_URL set but psycopg2 unavailable: %s", import_error)
         configured = False
 
 _lock = threading.Lock()
@@ -236,7 +238,12 @@ def recent_leads(query=None, location=None, limit=20):
 
 def db_status():
     if not configured:
-        return {"configured": False, "status": "not configured"}
+        return {
+            "configured": False,
+            "status": "not configured",
+            "env_present": bool(os.environ.get("DATABASE_URL", "").strip()),
+            "import_error": import_error,
+        }
     try:
         st = int(time.time())
         with _lock:
