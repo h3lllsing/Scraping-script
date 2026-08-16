@@ -13,6 +13,9 @@ No API keys required. Ready to deploy on Render.
 
 ## Quick start (local)
 
+For the **RapidAPI listing** (metadata, endpoints, pricing tiers, step-by-step
+publish flow): see [`RAPIDAPI_LISTING.md`](RAPIDAPI_LISTING.md).
+
 ```bash
 pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
