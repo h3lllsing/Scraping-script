@@ -289,7 +289,7 @@ class OSMScraper(BaseScraper):
             members = [f'node["name"]({s:.6f},{w:.6f},{n:.6f},{e:.6f})']
             if not light:
                 members.append(f'way["name"]({s:.6f},{w:.6f},{n:.6f},{e:.6f})')
-        group = " ".join(members)
+        group = "; ".join(members) + ";"
         return (
             f"[out:json][timeout:{OVERPASS_DEADLINE}];"
             f"({group})->.a;"
@@ -347,7 +347,7 @@ class OSMScraper(BaseScraper):
                     ep,
                     data={"data": overpass_query},
                     headers={"User-Agent": USER_AGENT},
-                    timeout=min(OVERPASS_DEADLINE, 18),
+                    timeout=OVERPASS_DEADLINE + 15,
                 )
                 if r.status_code == 429:
                     time.sleep(0.6)
