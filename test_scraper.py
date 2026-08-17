@@ -1,4 +1,6 @@
 import asyncio
+import json
+import os
 import re
 import unittest
 from unittest import mock
@@ -555,6 +557,105 @@ class TestLeadpack(unittest.TestCase):
         self.assertEqual(data["results"], [])
         url = m.call_args.args[0].full_url
         self.assertTrue(url.startswith("https://custom.example:444/scrape?"), url)
+
+    def _rows(self, count, phones):
+        rows = []
+        for i in range(count):
+            has_phone = i < phones
+            rows.append(
+                {
+                    "name": f"Place {i}",
+                    "phone": f"+1 555 000 {i:04d}" if has_phone else "",
+                    "email": ["x@y.z"] if has_phone else [],
+                    "extra": {"phone_via": "osm"} if has_phone else {},
+                    "address": "1 Main St",
+                    "website": "",
+                    "latitude": "1",
+                    "longitude": "2",
+                    "source": "openstreetmap",
+                }
+            )
+        return rows
+
+    def _fake_resp(self, rows):
+        class FakeResp:
+            def read(self):
+                return json.dumps({"results": rows, "generated_at": "x"}).encode()
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        return FakeResp()
+
+    def test_base_prefix(self):
+        import generate_leadpack as g
+
+        self.assertEqual(g.base_prefix("austin_dentist-2026-08-16.csv"), "austin_dentist")
+        self.assertEqual(g.base_prefix("new_york_restaurant-2026-08-16.csv"), "new_york_restaurant")
+        self.assertEqual(g.base_prefix("london_cafe-2026-08-16.csv"), "london_cafe")
+
+    def test_gate_rejects_low_count(self):
+        import generate_leadpack as g
+
+        self.assertFalse(g._gate(10, 8, 1)[0])
+        self.assertIn("count", g._gate(10, 8, 1)[1])
+
+    def test_gate_rejects_low_contacts(self):
+        import generate_leadpack as g
+
+        self.assertFalse(g._gate(40, 2, 0)[0])
+        self.assertIn("phone", g._gate(40, 2, 0)[1])
+        import generate_leadpack as g
+
+        self.assertFalse(g._gate(40, 2, 0)[0])
+        self.assertIn("phone", g._gate(40, 2, 0)[1])
+
+    def test_gate_passes_on_phone_pct_or_emails(self):
+        import generate_leadpack as g
+
+        self.assertTrue(g._gate(40, 8, 0)[0])  # 20% phones
+        self.assertTrue(g._gate(40, 0, 3)[0])  # enough emails
+
+    def test_write_leadpack_skips_and_keeps_previous(self):
+        import datetime
+        import generate_leadpack as g
+
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            today = datetime.date.today().isoformat()
+            with mock.patch("generate_leadpack.OUT_DIR", tmp):
+                prev = os.path.join(tmp, f"testville_restaurant-2026-08-16.csv")
+                with open(prev, "w", newline="", encoding="utf-8-sig") as f:
+                    f.write("name,phone\noldrow,\n")
+                with mock.patch("urllib.request.urlopen", return_value=self._fake_resp(self._rows(40, 0))):
+                    info = g.write_leadpack("restaurant", "Testville", 50)
+                self.assertFalse(info["passed"])
+                self.assertIsNone(info["path"])
+                self.assertTrue(os.path.exists(prev))  # previous pack kept
+
+    def test_write_leadpack_odbl_attribution(self):
+        import datetime
+        import generate_leadpack as g
+
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            today = datetime.date.today().isoformat()
+            with mock.patch("generate_leadpack.OUT_DIR", tmp):
+                with mock.patch("urllib.request.urlopen", return_value=self._fake_resp(self._rows(40, 8))):
+                    info = g.write_leadpack("restaurant", "Testville", 50)
+                self.assertTrue(info["passed"])
+                self.assertEqual(info["rows"], 40)
+                path = os.path.join(tmp, f"testville_restaurant-{today}.csv")
+                self.assertEqual(info["path"], path)
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    lines = f.read().splitlines()
+                self.assertTrue(lines[0].startswith("# Data © OpenStreetMap contributors (ODbL)"), lines[0])
+                self.assertEqual(lines[1], "name,phone,email,address,website,latitude,longitude,source,phone_via")
 
 
 class TestGeocodeCache(unittest.TestCase):

@@ -39,7 +39,7 @@ Key features
 - Search 80+ business types: restaurants, real estate agents, hotels, dentists,
   gyms, plumbers, electricians, roofing/HVAC, car dealers, lawyers, insurance,
   clinics, salons, cinemas, marinas and more
-- Worldwide coverage — works with any city name (New York, London, Berlin, Dubai…)
+- Worldwide coverage — works with any city name (New York, London, Berlin, Sydney…)
 - Free phone + email enrichment: set enrich=true (default) and the API visits the
   business's own website to pull a phone number and any published contact email
 - phone_only=true returns only records with a phone

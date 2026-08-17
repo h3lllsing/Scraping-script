@@ -127,7 +127,7 @@ def scrape(
     ),
     location: Optional[str] = Query(
         None,
-        description="City or area name (worldwide), e.g. New York, London, Berlin, Dubai (optional for global search).",
+        description="City or area name (worldwide), e.g. New York, London, Berlin, Sydney (optional for global search).",
         examples=["New York"],
     ),
     limit: int = Query(

@@ -170,6 +170,9 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
 | `RATE_LIMIT_WINDOW`  | `60`    | Rate-limit window (seconds)                  |
 | `DATABASE_URL`       | —       | Supabase/Postgres URL — enables durable cache + leads table |
 | `LEADS_API_KEY`      | —       | Secret required to read `/leads` (`X-API-Key` header); unset = disabled |
+| `QUALITY_MIN_COUNT`    | `40`    | Lead-pack quality gate: min rows        |
+| `QUALITY_MIN_PHONE_PCT`| `15`    | Lead-pack quality gate: min phone %     |
+| `QUALITY_MIN_EMAILS`   | `3`     | Lead-pack quality gate: min emails      |
 
 ## Deploy on Render
 
@@ -195,13 +198,17 @@ https://raw.githubusercontent.com/h3lllsing/Scraping-script/main/docs/leads/<cit
 ```
 
 - Edit `leadpacks.json` to change which niche × city packs to build. The default
-  roster is 12 worldwide cities × 5 high-demand niches (RealEstate, restaurant,
-  Hotel, dentist, gym) = 60 daily packs. Add cities/niches freely — in
-  North-America/UK/AU/EU cities OSM phone & website tags are much richer, so
-  those packs contain far more real phone numbers than South-Asian ones.
+  roster is 18 cities across US/UK/EU/CA/AU/NZ × 58 niche packs (restaurant,
+  cafe, hotel, salon, dentist, gym) — chosen because OSM/Photon contact tags are
+  far richer there than in South-Asian/Dubai cities. Every pack passes a
+  **quality gate** before it is written: at least 40 rows AND (15% phone rate OR
+  3+ emails). Packs that fail are skipped and the previous day's CSV is kept, so
+  quality stays high even when a data source is flaky.
 - Trigger manually: GitHub → **Actions → Lead Packs → Run workflow**.
 - Run locally: `python generate_leadpack.py --query restaurant --location New York`
-  (or `--all`). Set `LEADPACK_API` to point at any instance of this app.
+  (or `--all`). Set `LEADPACK_API` to point at any instance of this app. Gate
+  thresholds are tunable via `QUALITY_MIN_COUNT`, `QUALITY_MIN_PHONE_PCT`,
+  `QUALITY_MIN_EMAILS`.
 
 The workflow calls your live API's `/scrape?enrich=true` endpoint. Because the
 enrichment pass is already free, a pack that includes businesses with websites
@@ -215,10 +222,11 @@ this at, and do not hammer shared public endpoints.
 
 Important if you **resell** the output (Gumroad/RapidAPI buyers):
 - OSM data is licensed under **ODbL** — any product derived from it must credit
-  OpenStreetMap and, when shared publicly, carry the same open license. Include
-  an attribution line such as *"Data © OpenStreetMap contributors (ODbL)"* in
-  your CSV header or product listing, and publish the ODbL share-alike terms
-  alongside paid packs.
+  OpenStreetMap and, when shared publicly, carry the same open license. Every
+  generated pack now auto-includes the attribution line
+  *"Data © OpenStreetMap contributors (ODbL)"* in its CSV header; also keep it in
+  your product listing, and publish the ODbL share-alike terms alongside paid
+  packs.
 - Emails are only ever ones the businesses themselves published (never guessed).
   Running cold-email campaigns (sending unsolicited bulk mail to the scraped
   addresses) can breach anti-spam law (CAN-SPAM / GDPR / PECR in the EU/UK) and
