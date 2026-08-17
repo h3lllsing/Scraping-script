@@ -1,10 +1,11 @@
-﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+﻿# Data © OpenStreetMap contributors (ODbL) — https://www.openstreetmap.org/copyright
+name,phone,email,address,website,latitude,longitude,source,phone_via
 Restaurant Nolle,+49302082645,,"Georgenstraße 203, Dorotheenstadt, Mitte, Berlin, 10117",https://www.restaurant-nolle.de/,52.5199871,13.3890697,photon,website
 "Restaurant ""1811""",,,"Schlüterstraße 55, Charlottenburg, Berlin, 10629",,52.5044978,13.3175573,photon,
 "Restaurant ""Europa City""",,,"Konstanzer Straße, Fasanenkiez, Wilmersdorf, Berlin, 10707",,52.4978833,13.3121911,photon,
 Restaurant & Bar am Steinplatz,,,"Steinplatz 4, Charlottenburg, Berlin, 10623",,52.5080296,13.3263333,photon,
 Restaurant & Café Haberland,,,"Bayerischer Platz 0, Bayerisches Viertel, Schöneberg, Berlin, 10779",,52.4883185,13.3402483,photon,
-Restaurant Angkor Wat,,,"Paulstraße 22, Europacity, Moabit, Berlin, 10557",https://www.angkorwatrestaurant.de/,52.5201925,13.3558888,photon,
+Restaurant Angkor Wat,,,"Paulstraße 22, Europacity, Moabit, Berlin, 10557",,52.5201925,13.3558888,photon,
 Restaurant Athos,,,"Hermann-Hesse-Straße 27, Niederschönhausen, Berlin, 13156",,52.5798294,13.3989583,photon,
 Restaurant Athos,,,"Gudrunstraße 5A, Lichtenberg, Berlin, 10365",,52.5129887,13.5012738,photon,
 Restaurant Bibi,,,"Reichweindamm, Paul-Hertz-Siedlung, Charlottenburg-Nord, Berlin, 13627",,52.5358951,13.3004207,photon,
@@ -43,7 +44,7 @@ Restaurant Quarré,,,"Unter den Linden 77, Friedrich-Wilhelm-Stadt, Mitte, Berli
 Restaurant R23,,,"Rankestraße 23, City West, Charlottenburg, Berlin, 10789",,52.5013615,13.3328784,photon,
 Restaurant Senova,,,"Cotheniusstraße 8, Grüne Stadt, Prenzlauer Berg, Berlin, 10407",,52.5286027,13.4491113,photon,
 Restaurant Si,,,"Fischerhüttenstraße 45, Waldsiedlung Krumme Lanke, Zehlendorf, Berlin, 14163",,52.43863,13.249543,photon,
-Restaurant Split,,,"Blücherplatz 2, Tempelhofer Vorstadt, Kreuzberg, Berlin, 10961",https://www.restaurant-split-berlin.de/,52.4963757,13.3904509,photon,
+Restaurant Split,,,"Blücherplatz 2, Tempelhofer Vorstadt, Kreuzberg, Berlin, 10961",,52.4963757,13.3904509,photon,
 Restaurant Split,,,"Schloßstraße 128, Bismarckviertel, Steglitz, Berlin, 12163",,52.4641831,13.3281418,photon,
 Restaurant Split,,,"Rixdorfer Straße 89, Mariendorf, Berlin, 12109",,52.4465056,13.40215,photon,
 Restaurant Taler,,,"Kyffhäuserstraße 14, Winterfeldtkiez, Schöneberg, Berlin, 10781",,52.4921638,13.3515311,photon,

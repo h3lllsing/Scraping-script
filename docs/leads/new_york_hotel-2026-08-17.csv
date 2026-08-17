@@ -1,7 +1,8 @@
-﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+﻿# Data © OpenStreetMap contributors (ODbL) — https://www.openstreetmap.org/copyright
+name,phone,email,address,website,latitude,longitude,source,phone_via
 Hotel Mimosa,+12123434243,contact@hotelmimosany.com,"Division Street 79, Two Bridges, Manhattan, New York, 10002",https://www.hotelmimosany.com/,40.7141176,-73.9937822,photon,website
 Hotel Mulberry,+12123854633,info@hotelmulberry.com,"Mulberry Street 52, Manhattan Community Board 3, Manhattan, New York, 10013",https://www.hotelmulberry.com,40.7152258,-73.999386,photon,website
-Hotel on Rivington,+12124752600,,"Rivington Street 107, Lower East Side, Manhattan, New York, 10002",https://www.hotelonrivington.com/,40.7198066,-73.9880825,photon,website
+Howard Johnson,+16073342200,,"75, North Broad Street, Norwich, 13815",http://www.hojo.com/hotels/new-york/norwich/howard-johnson-hotel-norwich/hotel-overview,42.5330669,-75.5241877,openstreetmap,
 Hotel 1080,,,"Broadway 1084, Brooklyn, New York, 11207",,40.6944177,-73.931,photon,
 Hotel 17,,,"East 17th Street 225, Stuy Town, Manhattan, New York, 10003",,40.7349171,-73.9845434,photon,
 Hotel 309,,,"West 14th Street 309, Manhattan Community Board 4, Manhattan, New York, 10011",,40.740247,-74.0030915,photon,
@@ -22,13 +23,13 @@ Hotel BPM,,,"33rd Street 137, Greenwood Heights, Brooklyn, New York, 11232",,40.
 Hotel Central Times Square,,,"West 36th Street, Hudson Yards, Manhattan, New York, 10018",,40.754332,-73.9941229,photon,
 Hotel Chelsea,,,"West 23rd Street 222, Chelsea District, Manhattan, New York, 10011",,40.7443742,-73.9968175,photon,
 Hotel Churchill,,,"West End Avenue, Upper West Side, Manhattan, New York, 10023",,40.7819444,-73.9825,photon,
-Hotel Gansevoort,,,"9th Avenue 18, Meatpacking District, Manhattan, New York, 10014",https://www.gansevoorthotelgroup.com/hotels/gansevoort-meatpacking-nyc/,40.7398769,-74.0057111,photon,
+Hotel Gansevoort,,,"9th Avenue 18, Meatpacking District, Manhattan, New York, 10014",,40.7398769,-74.0057111,photon,
 Hotel Giraffe,,,"Park Avenue South 365, Rose Hill, Manhattan, New York, 10016",,40.742143,-73.984716,photon,
 Hotel Hayden,,,"West 28th Street 137, Flower District, Manhattan, New York, 10001",,40.7468751,-73.9921509,photon,
 Hotel Hendricks,,,"West 38th Street 25, Midtown South, Manhattan, New York, 10018",,40.7517801,-73.9840814,photon,
 Hotel Indigo,,,"Water Street 120, Financial District, Manhattan, New York, 10005",https://www.ihg.com/hotelindigo/hotels/us/en/new-york/nycgo/hoteldetail,40.7055292,-74.0073551,photon,
 Hotel Indigo,,,"Trinity Place 50, Whitehall, Manhattan, New York, 10006",,40.7077567,-74.0132952,photon,
-Hotel Indigo,,,"Orchard Street 180, Manhattan Community Board 3, Manhattan, New York, 10002",https://www.ihg.com/hotelindigo/hotels/us/en/new-york/nycos/hoteldetail,40.7217017,-73.9876904,photon,
+Hotel Indigo,,,"Orchard Street 180, Manhattan Community Board 3, Manhattan, New York, 10002",,40.7217017,-73.9876904,photon,
 Hotel Indigo,,,"Duffield Street 229, Downtown Brooklyn, Brooklyn, New York, 11201",,40.6912257,-73.9840958,photon,
 Hotel Indigo,,,"West 28th Street 127, Flower District, Manhattan, New York, 10001",,40.7467993,-73.99172,photon,
 Hotel Indigo,,,"Metropolitan Avenue 500, Williamsburg, Brooklyn, New York, 11211",,40.7134861,-73.9528992,photon,
@@ -38,6 +39,7 @@ Hotel MB,,,"Chrystie Street, Manhattan Community Board 3, Manhattan, New York, 1
 hotel mela,,,"West 44th Street 120, Times Square, Manhattan, New York, 10036",,40.7565163,-73.984341,photon,
 Hotel Nirvana,,,"37th Avenue 12-02, Ravenswood, Queens, New York, 11101",,40.7592128,-73.9398591,photon,
 Hotel Omega,,,"Pennsylvania Avenue 27, Broadway Junction, Brooklyn, New York, 11207",,40.6774746,-73.8969682,photon,
+Hotel on Rivington,,,"Rivington Street 107, Lower East Side, Manhattan, New York, 10002",,40.7198066,-73.9880825,photon,
 Hotel Richland,,,"Allen Street 5, Two Bridges, Manhattan, New York, 10002",,40.7147385,-73.9930781,photon,
 Hotel Riu Plaza Manhattan Times Square,,,"West 47th Street 145, Diamond District, Manhattan, New York, 10036",,40.7589294,-73.9833957,photon,
 Hotel Riu Plaza New York Times Square,,,"West 46th Street 305, Hell's Kitchen, Manhattan, New York, 10036",,40.7602133,-73.9881913,photon,
