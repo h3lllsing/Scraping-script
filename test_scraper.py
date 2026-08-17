@@ -606,12 +606,8 @@ class TestLeadpack(unittest.TestCase):
     def test_gate_rejects_low_contacts(self):
         import generate_leadpack as g
 
-        self.assertFalse(g._gate(40, 2, 0)[0])
-        self.assertIn("phone", g._gate(40, 2, 0)[1])
-        import generate_leadpack as g
-
-        self.assertFalse(g._gate(40, 2, 0)[0])
-        self.assertIn("phone", g._gate(40, 2, 0)[1])
+        self.assertFalse(g._gate(40, 1, 0)[0])
+        self.assertIn("phone", g._gate(40, 1, 0)[1])
 
     def test_gate_passes_on_phone_pct_or_emails(self):
         import generate_leadpack as g

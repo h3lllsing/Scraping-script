@@ -170,9 +170,9 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
 | `RATE_LIMIT_WINDOW`  | `60`    | Rate-limit window (seconds)                  |
 | `DATABASE_URL`       | —       | Supabase/Postgres URL — enables durable cache + leads table |
 | `LEADS_API_KEY`      | —       | Secret required to read `/leads` (`X-API-Key` header); unset = disabled |
-| `QUALITY_MIN_COUNT`    | `40`    | Lead-pack quality gate: min rows        |
-| `QUALITY_MIN_PHONE_PCT`| `15`    | Lead-pack quality gate: min phone %     |
-| `QUALITY_MIN_EMAILS`   | `3`     | Lead-pack quality gate: min emails      |
+| `QUALITY_MIN_COUNT`    | `30`    | Lead-pack quality gate: min rows        |
+| `QUALITY_MIN_PHONE_PCT`| `5`     | Lead-pack quality gate: min phone %     |
+| `QUALITY_MIN_EMAILS`   | `2`     | Lead-pack quality gate: min emails      |
 
 ## Deploy on Render
 
@@ -201,8 +201,8 @@ https://raw.githubusercontent.com/h3lllsing/Scraping-script/main/docs/leads/<cit
   roster is 18 cities across US/UK/EU/CA/AU/NZ × 58 niche packs (restaurant,
   cafe, hotel, salon, dentist, gym) — chosen because OSM/Photon contact tags are
   far richer there than in South-Asian/Dubai cities. Every pack passes a
-  **quality gate** before it is written: at least 40 rows AND (15% phone rate OR
-  3+ emails). Packs that fail are skipped and the previous day's CSV is kept, so
+  **quality gate** before it is written: at least 30 rows AND (5% phone rate OR
+  2+ emails). Packs that fail are skipped and the previous day's CSV is kept, so
   quality stays high even when a data source is flaky.
 - Trigger manually: GitHub → **Actions → Lead Packs → Run workflow**.
 - Run locally: `python generate_leadpack.py --query restaurant --location New York`

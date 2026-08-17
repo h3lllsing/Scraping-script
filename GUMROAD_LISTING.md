@@ -59,8 +59,11 @@ snapshot file to Gumroad, or keep the URL updated during the weekly refresh.
 
 - Phones/emails are **only ones the businesses publish** (OSM tags + the
   business's own website). Never guessed or fabricated.
-- Expect roughly 15-40% of rows to have a phone, fewer to have an email,
-  depending on niche and city. Some packs have mostly address + GPS.
+- Expect roughly 5-15% of rows to have a phone, fewer to have an email,
+  depending on niche and city. Packs are **business directories** (name,
+  address, website, GPS + published contact data) — ideal for local research,
+  directory building, and sales prospecting where the caller uses the listed
+  website or main line.
 - This is research/outreach data. **Do not** run unsolicited bulk cold-email
   campaigns — it can breach CAN-SPAM / GDPR / PECR and kills deliverability.
 

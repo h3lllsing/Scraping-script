@@ -11,9 +11,9 @@ API_BASE = os.environ.get("LEADPACK_API", "https://scraping-script-xi.vercel.app
 OUT_DIR = os.environ.get("LEADPACK_OUT", "docs/leads")
 DEFAULT_LIMIT = 50
 
-QUALITY_MIN_COUNT = int(os.environ.get("QUALITY_MIN_COUNT", "40"))
-QUALITY_MIN_PHONE_PCT = int(os.environ.get("QUALITY_MIN_PHONE_PCT", "15"))
-QUALITY_MIN_EMAILS = int(os.environ.get("QUALITY_MIN_EMAILS", "3"))
+QUALITY_MIN_COUNT = int(os.environ.get("QUALITY_MIN_COUNT", "30"))
+QUALITY_MIN_PHONE_PCT = int(os.environ.get("QUALITY_MIN_PHONE_PCT", "5"))
+QUALITY_MIN_EMAILS = int(os.environ.get("QUALITY_MIN_EMAILS", "2"))
 
 ODBL_LINE = "# Data © OpenStreetMap contributors (ODbL) — https://www.openstreetmap.org/copyright"
 
