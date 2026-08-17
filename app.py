@@ -111,7 +111,7 @@ async def rate_limit_middleware(request: Request, call_next):
 def index():
     return {
         "name": "Business Directory Scraper",
-        "usage": "/scrape?query=RealEstate&location=Karachi",
+        "usage": "/scrape?query=RealEstate&location=New York",
         "sources": ["openstreetmap", "photon", "google_maps"],
         "documentation": "/docs",
     }
@@ -127,7 +127,7 @@ def scrape(
     ),
     location: Optional[str] = Query(
         None,
-        description="City or area name (worldwide), e.g. New York, London, Karachi, Dubai (optional for global search).",
+        description="City or area name (worldwide), e.g. New York, London, Berlin, Dubai (optional for global search).",
         examples=["New York"],
     ),
     limit: int = Query(

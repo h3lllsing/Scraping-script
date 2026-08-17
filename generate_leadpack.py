@@ -12,12 +12,10 @@ OUT_DIR = os.environ.get("LEADPACK_OUT", "docs/leads")
 DEFAULT_LIMIT = 50
 
 PACKS = [
-    {"city": "Karachi", "query": "RealEstate", "limit": 50},
-    {"city": "Karachi", "query": "restaurant", "limit": 50},
-    {"city": "Lahore", "query": "RealEstate", "limit": 50},
-    {"city": "Lahore", "query": "restaurant", "limit": 50},
-    {"city": "Islamabad", "query": "RealEstate", "limit": 50},
-    {"city": "Islamabad", "query": "restaurant", "limit": 50},
+    {"city": "New York", "query": "RealEstate", "limit": 50},
+    {"city": "New York", "query": "dentist", "limit": 50},
+    {"city": "London", "query": "RealEstate", "limit": 50},
+    {"city": "Houston", "query": "dentist", "limit": 50},
 ]
 
 COLUMNS = [

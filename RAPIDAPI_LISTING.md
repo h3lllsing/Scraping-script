@@ -39,7 +39,7 @@ Key features
 - Search 80+ business types: restaurants, real estate agents, hotels, dentists,
   gyms, plumbers, electricians, roofing/HVAC, car dealers, lawyers, insurance,
   clinics, salons, cinemas, marinas and more
-- Worldwide coverage — works with any city name (New York, London, Karachi, Dubai…)
+- Worldwide coverage — works with any city name (New York, London, Berlin, Dubai…)
 - Free phone + email enrichment: set enrich=true (default) and the API visits the
   business's own website to pull a phone number and any published contact email
 - phone_only=true returns only records with a phone
@@ -69,7 +69,7 @@ Emails are only ever ones the businesses themselves published (never guessed).
 **Parameter definitions (copy into RapidAPI):**
 
 - `query` — string, **required**. Business type: RealEstate, restaurant, hotel, dentist, gym, plumber, electrician, lawyer, insurance, car repair, salon, clinic, pharmacy, bank, school, hospital…
-- `location` — string, optional. City/area name: `New York`, `London`, `Karachi`, `Dubai`. Empty = try worldwide.
+- `location` — string, optional. City/area name: `New York`, `London`, `Berlin`, `Dubai`. Empty = try worldwide.
 - `limit` — integer 1–50, default 20.
 - `sources` — comma list: `auto` (default), `openstreetmap`, `photon`, `google_maps`.
 - `phone_only` — boolean, default false.

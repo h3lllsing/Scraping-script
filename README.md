@@ -24,31 +24,31 @@ uvicorn app:app --reload --port 8000
 Then call:
 
 ```text
-GET http://127.0.0.1:8000/scrape?query=RealEstate&location=Karachi
+GET http://127.0.0.1:8000/scrape?query=restaurant&location=New York
 ```
 
 Example response (truncated):
 
 ```json
 {
-  "query": "RealEstate",
-  "location": "Karachi",
-  "count": 3,
+  "query": "restaurant",
+  "location": "New York",
+  "count": 1,
   "results": [
     {
-      "name": "Real Estate Insvestment",
-      "phone": null,
-      "address": "Abdul Sattar Edhi Road, Clifton Block 4, Saddar Town, Sindh, 75600",
-      "website": null,
-      "latitude": 24.813,
-      "longitude": 67.046,
+      "name": "Grand Central Oyster Bar and Restaurant",
+      "phone": "2124906650",
+      "address": "East 42nd Street 89, Midtown, Manhattan, New York, 10168",
+      "website": "https://www.oysterbarny.com/",
+      "latitude": 40.7524,
+      "longitude": -73.9773,
       "source": "photon",
-      "extra": { "osm_type": "N", "osm_id": 4828729779, "category": "office:estate_agent" }
+      "extra": { "phone_via": "website" }
     }
   ],
   "sources": {
-    "openstreetmap": { "status": "error", "error": "..." },
-    "photon": { "status": "ok", "error": null }
+    "openstreetmap": { "status": "ok" },
+    "photon": { "status": "ok" }
   }
 }
 ```
@@ -58,7 +58,7 @@ Example response (truncated):
 | Parameter    | Type    | Default                     | Description                                                        |
 |--------------|---------|-----------------------------|--------------------------------------------------------------------|
 | `query`      | str     | required                    | Business type or keyword, e.g. `RealEstate`, `restaurant`, `hotel` |
-| `location`   | str     | —                           | City / area, e.g. `Karachi`, `Berlin`. Optional.                    |
+| `location`   | str     | —                           | City / area, e.g. `New York`, `Berlin`. Optional.                    |
 | `limit`      | int     | `20`                        | Max results (`1..{max}`; cap configurable via `MAX_RESULTS`). |
 | `sources`    | str     | `openstreetmap,photon`      | Comma list: `openstreetmap`, `photon`, `google_maps`, `auto`. |
 | `phone_only` | bool    | `false`                     | Return only records that have a phone number.                |
@@ -178,7 +178,7 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
    Language is auto-detected (Python 3.12).
 3. Build command: `pip install -r requirements.txt`
 4. Start command: `uvicorn app:app --host 0.0.0.0 --port $PORT`
-5. Deploy, then open `https://<your-service>.onrender.com/scrape?query=RealEstate&location=Karachi`
+5. Deploy, then open `https://<your-service>.onrender.com/scrape?query=RealEstate&location=New%20York`
 
 A `render.yaml` blueprint is included so you can also use **New → Blueprint**.
 
@@ -200,7 +200,7 @@ https://raw.githubusercontent.com/h3lllsing/Scraping-script/main/docs/leads/<cit
   North-America/UK/AU/EU cities OSM phone & website tags are much richer, so
   those packs contain far more real phone numbers than South-Asian ones.
 - Trigger manually: GitHub → **Actions → Lead Packs → Run workflow**.
-- Run locally: `python generate_leadpack.py --query restaurant --location Karachi`
+- Run locally: `python generate_leadpack.py --query restaurant --location New York`
   (or `--all`). Set `LEADPACK_API` to point at any instance of this app.
 
 The workflow calls your live API's `/scrape?enrich=true` endpoint. Because the
