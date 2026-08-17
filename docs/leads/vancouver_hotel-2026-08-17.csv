@@ -1,4 +1,5 @@
-﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+﻿# Data © OpenStreetMap contributors (ODbL) — https://www.openstreetmap.org/copyright
+name,phone,email,address,website,latitude,longitude,source,phone_via
 Best Western Premier Chateau Granville Hotel & Suites & Conference Centre,18006630575,res@chateaugranville.com,"Granville Street 1100, Granville, Downtown, Vancouver, British Columbia, V6Z 1L8",https://www.chateaugranville.com/,49.2776626,-123.1247284,photon,website
 Blu Hotel,6046206200,,"Robson Street 177, Yaletown, Downtown, Vancouver, British Columbia, V6B 1C2",https://hotelbluvancouver.com/,49.2781605,-123.114459,photon,website
 Georgian Court Hotel,18006631155,info@georgiancourt.com,"Beatty Street 773, Downtown, Vancouver, British Columbia, V6B 2M1",https://georgiancourthotelvancouver.com/,49.2780805,-123.113659,photon,website

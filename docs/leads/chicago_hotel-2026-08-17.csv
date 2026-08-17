@@ -1,4 +1,5 @@
-﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+﻿# Data © OpenStreetMap contributors (ODbL) — https://www.openstreetmap.org/copyright
+name,phone,email,address,website,latitude,longitude,source,phone_via
 Club Quarters Central Loop Hotel,+13126013525,info@centralloophotel.com,"West Adams Street 111, Financial District, The Loop, Chicago, Illinois, 60603",https://www.centralloophotel.com/,41.8793184,-87.631192,photon,website
 Silversmith Hotel Chicago Downtown,3123727696,info@silversmithhotel.com,"South Wabash Avenue 10, Jewelers Row, The Loop, Chicago, Illinois, 60603",https://www.silversmithchicagohotel.com/,41.881682,-87.6266569,photon,website
 Wyndham Blake Hotel,3129861234,rentalsales@hgvc.com,"South Dearborn Street 500, Printer's Row, The Loop, Chicago, Illinois, 60605",https://www.hotelblake.com/,41.87514,-87.6295038,photon,website

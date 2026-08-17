@@ -1,4 +1,5 @@
-﻿name,phone,email,address,website,latitude,longitude,source,phone_via
+﻿# Data © OpenStreetMap contributors (ODbL) — https://www.openstreetmap.org/copyright
+name,phone,email,address,website,latitude,longitude,source,phone_via
 ETA Restaurant + Bar,+13128406605,,"North Park Drive 455, Streeterville, Near North Side, Chicago, Illinois, 60611",https://www.etarestaurantandbar.com/,41.8898716,-87.6193007,photon,website
 Exchequer Restaurant & Pub,3129395633,events@exchequerpub.com; catering@exchequerpub.com,"South Wabash Avenue 226, Jewelers Row, The Loop, Chicago, Illinois, 60604",https://www.exchequerpub.com,41.878746,-87.6263195,photon,website
 Roanoke Restaurant,3123613800,info@roanokehospitality.com,"West Madison Street 135, Financial District, The Loop, Chicago, Illinois, 60603",https://www.theroanokerestaurant.com/,41.8818534,-87.6317924,photon,website

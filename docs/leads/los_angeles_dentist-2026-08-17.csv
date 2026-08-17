@@ -1,7 +1,7 @@
-﻿name,phone,email,address,website,latitude,longitude,source,phone_via
-Family Dentistry,+16262816642,jinliudentistry@gmail.com,"West Main Street 407, Alhambra, California, 91801",https://jinliudds.com/,34.093183,-118.1314633,photon,website
+﻿# Data © OpenStreetMap contributors (ODbL) — https://www.openstreetmap.org/copyright
+name,phone,email,address,website,latitude,longitude,source,phone_via
+"Dr. Yaelle Gabay, DDS",+18188483322,,"2701, West Alameda Avenue, Burbank, 91505",,34.1577954,-118.330424,openstreetmap,
 General & Cosmetic Dentistry,+13239311385,,"South Kenmore Avenue 614, Koreatown, Los Angeles, California, 90005",https://www.ladentalsmile.com/,34.0629437,-118.2964747,photon,website
-Little Crown Pediatric Dentistry,+16264031800,,"Mission Street 1427, Raymond Hill, South Pasadena, California, 91030",https://littlecrownpediatricdentistry.com/south-pasadena-mission-st/,34.1156957,-118.1519196,photon,website
 Nobel Dentistry,2133867173,nobel.dds@gmail.com,"West 6th Street 3851, Koreatown, Los Angeles, California, 90020",https://nobeldds.com/,34.0636686,-118.3068191,photon,website
 123 Kids Dentistry of East LA,,,"East 3rd Street 3845, East Los Angeles, Los Angeles, California, 90063",,34.0336774,-118.1848064,photon,
 Alhambra Modern Dentistry,,,"East Main Street 100, Alhambra, California, 91801",,34.0952712,-118.126112,photon,
@@ -21,6 +21,7 @@ Dentistry 4 Kids,,,"State Street, Corona, California, 92877",,33.8432474,-117.53
 Dentistry 4 Kids,,,"Tyler Street, La Sierra, Riverside, California, 92505",,33.912926,-117.4617854,photon,
 Dentistry 4 Kids,,,"Marygold Avenue 16946, Fontana, California, 92335",,34.0743317,-117.4347615,photon,
 Dentistry Bliss,,,"Irvine Boulevard 6332, Woodbury, Irvine, California, 92620",,33.6962232,-117.7408379,photon,
+Dentistry Bliss,,,"6332, Irvine Boulevard, Irvine, 92620",,33.6962232,-117.7408379,openstreetmap,
 Dentistry of Newport Beach,,,"Superior Avenue 320, Superior Heights, Newport Beach, California, 92663",,33.6263193,-117.9328715,photon,
 Dentists of Chino Preserve,,,"Market Street, Chino, California, 91708",,33.9575063,-117.6209115,photon,
 Dentists of Fontana,,,"South Highland Avenue 16944, Walnut Village, Fontana, California, 92336",,34.1348912,-117.4349928,photon,
@@ -29,13 +30,17 @@ Dentists of South Bay,,,"Marion Avenue, Torrance, California, 90505",,33.8132235
 Dr López Dentist,,,"North Broadway, Lincoln Heights, Los Angeles, California, 90031",,34.0735198,-118.2137205,photon,
 Enhance Dentist,,,"Lowell Avenue, Highway Highlands, Glendale, California, 91042",,34.2406514,-118.2657651,photon,
 Family Dentist,,,"West Rosecrans Avenue 3929, Hawthorne, California, 90250",,33.9022506,-118.3425104,photon,
+Family Dentistry,,,"West Main Street 407, Alhambra, California, 91801",,34.093183,-118.1314633,photon,
 Frankel Group Dentistry,,,"Venice Boulevard 9201, Palms, Los Angeles, California, 90034",,34.0266352,-118.3939751,photon,
 Guess;Rifkin Raanan Beverly Hills Cosmetic Dentistry,,,"North Rodeo Drive;North Camden Drive 414, Golden Triange, Beverly Hills, California, 90210",,34.0693333,-118.403372,photon,
 Hollywood Family Dentistry,,,"Santa Monica Boulevard 8205, West Hollywood, California, 90046",,34.0910115,-118.3678496,photon,
+Irvine Village Orthodontics,,,,,33.7334432,-117.759744,openstreetmap,
 "Justin H Liao DDS, Family and Cosmetic Dentistry",,,"West Las Tunas Drive 825, San Gabriel, California, 91776",,34.1027251,-118.1119454,photon,
 Le Chic Dentist,,,"Biona Drive, Palms, Los Angeles, California, 90066",,34.0120296,-118.4204137,photon,
+Little Crown Pediatric Dentistry,,,"Mission Street 1427, Raymond Hill, South Pasadena, California, 91030",,34.1156957,-118.1519196,photon,
 MP Bernardo Dentist,,,"West Sunset Boulevard 4331, Sunset Junction, Los Angeles, California, 90029",,34.0955529,-118.2830699,photon,
 NH Dentistry Beverly Hills,,,"Wilshire Blvd, Suite 625 8920, Beverly Hills, California, 90211",,34.0666265,-118.3861931,photon,
+Northpark Dental,,,,,33.7230592,-117.7710182,openstreetmap,
 Nuestra Dentista Familiar,,,"Santa Monica Boulevard 4627, East Hollywood, Los Angeles, California, 90029",,34.0912082,-118.2903708,photon,
 Pasadena Dentistry,,,"East Colorado Boulevard 704, Pasadena Playhouse District, Pasadena Council District 3, Pasadena, California, 91101",,34.1456606,-118.135855,photon,
 Pediatric Dentist Toni Chen DDS,,,"Huntington Drive 8204, East Pasadena, San Gabriel, California, 91775",,34.1266271,-118.0905738,photon,
@@ -43,4 +48,5 @@ Rite Dentist,,,"Magnolia Boulevard 12520, Garnsey, Los Angeles, California, 9160
 San Marino Pediatric Dentistry,,,"Huntington Drive 2318, San Marino, California, 91108",,34.1222337,-118.1042999,photon,
 Schoenbaum Dentist,,,"Overland Avenue, Culver City, California, 90232",,34.0103818,-118.399461,photon,
 Smiles Dentist,,,"Venice Boulevard, Palms, Los Angeles, California, 90232",,34.0153265,-118.4125159,photon,
+Sout Coast Orthodontist,,,,,33.5753667,-117.726101,openstreetmap,
 Thirty-2 Advanced Dentistry,,,"Santa Monica Boulevard 8763, West Hollywood, California, 90069",,34.0867002,-118.3819162,photon,
