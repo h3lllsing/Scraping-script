@@ -1,7 +1,6 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Locus Restaurant,6047084121,contact@locusonmain.com,"Main Street 4121, Riley Park, Vancouver, British Columbia, V5V 3P7",https://locusonmain.com/,49.2485142,-123.1014136,photon,website
 Sabra Kosher Bakery & Restaurant,6047334912,,"Oak Street 3844, Shaughnessy, South Cambie, Vancouver, British Columbia, V6H 2M5",https://sabrakosher.com/,49.251337,-123.1272962,photon,website
-Seaport City Seafood Restaurant,6042227288,,"Cambie Street 2425, Fairview, Vancouver, British Columbia, V5Y 1N9",https://seaportcityrestaurant.com/,49.263885,-123.1151505,photon,website
 Sun Sui Wah Seafood Restaurant,+16135551234,info@sunsuiwah.com; info@toursgratuit.com,"Main Street 3888, Riley Park, Vancouver, British Columbia, V5V 3N4",https://sunsuiwah.com/,49.2504301,-123.1007323,photon,website
 Afghan Horsemen Restaurant,,,"Anderson Street, Fairview, Vancouver, British Columbia, V6H 4E5",,49.269316,-123.1387834,photon,
 Carlino Restaurant,,,"Alberni Street 1115, West End, Vancouver, British Columbia, V6E 4T9",,49.2855856,-123.123807,photon,
@@ -42,6 +41,7 @@ Restaurant Phơ Bubble Tea Sandwich Teriyaki,,,"Van Wyck Road, Bellingham, Washi
 Restaurante Morazan,,,"West Bakerview Road, Bellingham, Washington, 98226",,48.7912073,-122.4949828,photon,
 Riviera Cafe & Restaurant,,,"Seaside - False Creek South, Fairview, Vancouver, British Columbia, V5Z 3Z1",,49.2685263,-123.1186259,photon,
 Sawasdee Thai Restaurant,,,"Main Street 4250, Riley Park, Vancouver, British Columbia, V5V 3R1",,49.2470738,-123.1008331,photon,
+Seaport City Seafood Restaurant,,,"Cambie Street 2425, Fairview, Vancouver, British Columbia, V5Y 1N9",https://seaportcityrestaurant.com/,49.263885,-123.1151505,photon,
 Shoom Restaurant,,,"Fraser Street 6555, South Hill, Sunset, Vancouver, British Columbia, V5X 1A9",,49.2248465,-123.0909786,photon,
 St. Lawrence Restaurant,,,"Powell Street 269, Downtown Eastside, Strathcona, Vancouver, British Columbia, V6A 1G4",,49.2832655,-123.0978958,photon,
 The Boathouse Restaurant,,,"Arbutus Street 1305, Kitsilano, Vancouver, British Columbia, V6J 5N2",,49.274204,-123.153753,photon,

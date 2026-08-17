@@ -1,7 +1,6 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Cicada Restaurant and Lounge,2134889488,dulcem@cicadarestaurant.com; events@cicadarestaurant.com,"South Olive Street 617, Jewelry District, Downtown, Los Angeles, California, 90014",https://www.cicadarestaurant.com,34.047728,-118.254757,photon,website
 East Garden Restaurant,2132620723,,"North Hill Street 750, New Chinatown, Chinatown, Los Angeles, California, 90012",http://www.east-garden-restaurant.com/,34.0617279,-118.2397071,photon,website
-Hop Li Seafood Restaurant,2136803939,,"Alpine Street 526, New Chinatown, Chinatown, Los Angeles, California, 90012",https://hopliseafoodlosangeles.com/,34.062933,-118.2405729,photon,website
 Hop Woo BBQ & Seafood Restaurant,2136173038,,"North Broadway 845, New Chinatown, Chinatown, Los Angeles, California, 90012",https://hopwoo.com/,34.0636302,-118.2378713,photon,website
 New Kamara Restaurant,2136201090,,"North Hill Street 709, New Chinatown, Chinatown, Los Angeles, California, 90012",https://www.newkamararestaurant.com/,34.0610067,-118.2409172,photon,website
 Anarbagh Indian Restaurant,,,"Franklin Ave 4656, Los Feliz, Los Angeles, California, 90027",,34.1051361,-118.2914812,photon,
@@ -19,6 +18,7 @@ Golfo De Fonseca Restaurant,,,"North Vermont Avenue 808, Bicycle District, Los A
 Guatemalteca Bakery & Restaurant,,,"Beverly Boulevard 4032, Koreatown, Los Angeles, California, 90004",,34.0761111,-118.2970434,photon,
 Hill Street Bar & Restaurant,,,"South Hill Street 200, Civic Center, Downtown, Los Angeles, California, 90012",,34.0528987,-118.2477085,photon,
 Home Restaurant,,,"Hillhurst Avenue 1760, Los Feliz, Los Angeles, California, 90027",,34.1029827,-118.2872345,photon,
+Hop Li Seafood Restaurant,,,"Alpine Street 526, New Chinatown, Chinatown, Los Angeles, California, 90012",https://hopliseafoodlosangeles.com/,34.062933,-118.2405729,photon,
 Kailey's Restaurant Salvadorean & Mexican Food,,,"North Broadway 3600, Lincoln Heights, Los Angeles, California, 90031",,34.0736873,-118.2024146,photon,
 KoBaWoo Restaurant,,,"South Vermont Avenue 698, Pico-Union, Los Angeles, California, 90005",,34.0600337,-118.2909312,photon,
 Las Tunas Restaurant,,,"West 3rd Street 3603, Little Bangladesh, Koreatown, Los Angeles, California, 90020",,34.0692303,-118.2943891,photon,

@@ -1,5 +1,4 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
-Golden Fork Seafood Restaurant Al Barsha,0552320007,info@lazeezuae.com; info@uppummulakumuae.com,"Sheikh Zayed Road, Al Barsha North, Al Barsha 1, Dubai",http://goldenfork.ae,25.113711,55.1900718,photon,website
 101 Restaurant and Bar,,,"Palm Jumeirah Broadwalk, Palm Jumeirah, Dubai",,25.0999596,55.1359895,photon,
 Al Bar Restaurant,,,"20a Street, Al Quoz Industrial Area 3, Al Quoz Community, Dubai",,25.1283766,55.2245455,photon,
 Al kabab al afghani restaurant,,,"Marina Walk, Dubai Marina, Dubai",,25.0820883,55.1457165,photon,
@@ -11,6 +10,7 @@ City Pearl Palace Restaurant,,,"First Al Khail Street, Al Quoz Industrial Area 3
 DAR Restaurant & Kitchen Al Mandi & Madhbi,,,"16 Street, Al Barsha 1, Dubai",,25.1109953,55.2058818,photon,
 Eat & Tasty Restaurant,,,"19 Street, Al Barsha 1, Dubai",,25.1149871,55.194306,photon,
 Fish Hut Restaurant,,,"Umm Suqeim Street, Al Barsha, Al Barsha 2, Dubai",,25.114965,55.212745,photon,
+Golden Fork Seafood Restaurant Al Barsha,,,"Sheikh Zayed Road, Al Barsha North, Al Barsha 1, Dubai",http://goldenfork.ae,25.113711,55.1900718,photon,
 Haji Sahab Restaurant,,,"1b Street, Discovery Gardens, Dubai",,25.0491803,55.1327795,photon,
 Hanoi Restaurant,,,"Footpath by the man-made pond, JLT Cluster C, Jumeirah Lakes Towers, Dubai",,25.0687128,55.1398273,photon,
 Harput Restaurant,,,"20 Street, Al Barsha 1, Dubai",,25.1161498,55.1949459,photon,

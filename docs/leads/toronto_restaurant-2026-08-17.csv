@@ -1,7 +1,6 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Hothouse Restaurant & Bar,+14163667800,info@hothouserestaurant.com,"Church Street 35, Downtown Yonge East, Toronto, Ontario, M5E 1T3",https://www.hothouserestaurant.com/,43.6488188,-79.3736883,photon,website
 New Hong Fatt BBQ Restaurant,14169773945,,"Dundas Street West 443, Kensington-Chinatown, Toronto, Ontario, M5T 1G7",https://hongfattbbq.com/,43.6532539,-79.3959266,photon,website
-Omai Restaurant,4165931234,,"Baldwin Street 21, Discovery District, Toronto, Ontario, M5T 1L1",https://omairestaurant.ca,43.6559972,-79.3929573,photon,website
 VegeDelight Restaurant,+13656085889,,"Dundas Street West 173, Yonge-Bay Corridor, Toronto, Ontario, M5G 1R5",https://www.vegedelight.ca/,43.6550602,-79.3863319,photon,website
 A Sezchuan Restaurant,,,"Spadina Avenue 440, Kensington Market, Toronto, Ontario, M5T 2G7",,43.657001,-79.3999604,photon,
 Actinolite Restaurant,,,"Ossington Avenue 971, Bloorcourt Village, Toronto, Ontario, M6G 3V5",,43.6678466,-79.4278983,photon,
@@ -30,6 +29,7 @@ Mimi Vietnamese Restaurant,,,"Gerrard Street East, East Chinatown, Toronto, Onta
 Monkey Sushi Restaurant,,,"Bloor Street West, Annex, Toronto, Ontario, M5S 1X5",,43.6657161,-79.4078813,photon,
 National Yacht Club Restaurant,,,"Stadium Road, Fort York, Toronto, Ontario, M5V 1A1",,43.6316849,-79.4022527,photon,
 Noce Restaurant & Bar,,,"Queen Street West 875, West Queen West, Toronto, Ontario, M6J 1E7",,43.6455327,-79.4113348,photon,
+Omai Restaurant,,,"Baldwin Street 21, Discovery District, Toronto, Ontario, M5T 1L1",https://omairestaurant.ca,43.6559972,-79.3929573,photon,
 Pat's Homestyle Jamaican Restaurant,,,"Queen Street West 558, Kensington-Chinatown, Toronto, Ontario, M5V 2B5",,43.6474862,-79.4031939,photon,
 Queen Star Restaurant,,,"Queen Street West 1116, West Queen West, Toronto, Ontario, M6J 1H9",,43.6434054,-79.4233092,photon,
 Restaurant on the Twenty,,,"Main Street 3845, Jordan, Lincoln, Ontario, L0R 1S0",,43.149443,-79.3701185,photon,

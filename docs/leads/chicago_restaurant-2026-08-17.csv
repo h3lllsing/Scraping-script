@@ -1,7 +1,6 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 ETA Restaurant + Bar,+13128406605,,"North Park Drive 455, Streeterville, Near North Side, Chicago, Illinois, 60611",https://www.etarestaurantandbar.com/,41.8898716,-87.6193007,photon,website
 Exchequer Restaurant & Pub,3129395633,events@exchequerpub.com; catering@exchequerpub.com,"South Wabash Avenue 226, Jewelers Row, The Loop, Chicago, Illinois, 60604",https://www.exchequerpub.com,41.878746,-87.6263195,photon,website
-Himalayan Restaurant,+13128775999,,"South Wabash Avenue 606, Printer's Row, The Loop, Chicago, Illinois, 60605",https://himalayanrestaurant.com/,41.8740857,-87.6262217,photon,website
 Roanoke Restaurant,3123613800,info@roanokehospitality.com,"West Madison Street 135, Financial District, The Loop, Chicago, Illinois, 60603",https://www.theroanokerestaurant.com/,41.8818534,-87.6317924,photon,website
 The Berghoff Restaurant,3124273170,jamaal@berghoff.com; ryan@berghoff.com,"West Adams Street 17, Financial District, The Loop, Chicago, Illinois, 60603",https://www.theberghoff.com/,41.8793454,-87.6284801,photon,website
 The Palm Restaurant,3126161000,,"East Wacker Drive 323, New East Side, The Loop, Chicago, Illinois, 60601",https://www.thepalm.com/location/the-palm-chicago/,41.8874781,-87.6195344,photon,website
@@ -21,6 +20,7 @@ EuroAsia Restaurant,,,"West Oak Street 351, River North, Near North Side, Chicag
 Fiesta Tapatia Restaurant,,,"West Cermak Road 2752, Marshall Square, South Lawndale, Chicago, Illinois, 60608",,41.8520598,-87.6950991,photon,
 Fullerton Restaurant,,,"West Fullerton Avenue 2400, Logan Square, Chicago, Illinois, 60647",,41.9250761,-87.6878723,photon,
 Golden Bull Restaurant,,,"West Cermak Road 242, Chinatown, Armour Square, Chicago, Illinois, 60616",,41.8530203,-87.6334811,photon,
+Himalayan Restaurant,,,"South Wabash Avenue 606, Printer's Row, The Loop, Chicago, Illinois, 60605",https://himalayanrestaurant.com/,41.8740857,-87.6262217,photon,
 HuaFeng Restaurant,,,"West 24th Street 208, Chinatown, Armour Square, Chicago, Illinois, 60616",,41.8493041,-87.6323741,photon,
 Huaraches Mexican Restaurant,,,"North Damen Avenue 2009, Bucktown, Chicago, Illinois, 60647",,41.9181079,-87.677445,photon,
 Huck Finn Restaurant,,,"South Archer Avenue 3414, Ducktown, McKinley Park, Chicago, Illinois, 60608",,41.8319004,-87.6758289,photon,

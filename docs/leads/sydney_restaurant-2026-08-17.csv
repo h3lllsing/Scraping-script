@@ -1,6 +1,5 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Red Lantern Vietnamese Restaurant & Private Dining Room,0296984355,reservations@redlantern.com.au,"Riley Street 60, Sydney CBD, Sydney, New South Wales, 2010",https://redlantern.com.au/,-33.8747803,151.2155169,photon,website
-Suminoya Japanese Restaurant,0292312177,info@suminoya.com.au,"Hosking Place 1, Wynyard, Sydney, New South Wales, 2000",https://www.suminoya.com.au/,-33.8670545,151.209138,photon,website
 Ainoya Japanese Restaurant,,,"Burton Street 34, Kirribilli, Sydney, New South Wales, 2061",,-33.8460971,151.2134542,photon,
 ANCHOR Cafe & Restaurant,,,"Alfred Street South 118, Milsons Point, Sydney, New South Wales, 2061",,-33.8437784,151.2103733,photon,
 Bamboo Thai Restaurant,,,"Chalmers Street 298, Redfern, Sydney, New South Wales, 2016",,-33.8926801,151.2056209,photon,
@@ -39,6 +38,7 @@ Palace Chinese Restaurant,,,"Castlereagh Street 133-145, Koreatown, Sydney, New 
 Prime Steak Restaurant,,,"Martin Place 1, Wynyard, Sydney, New South Wales, 2000",,-33.867708,151.2078305,photon,
 Restaurant Hot Pot,,,"Zetland Avenue, Zetland, Sydney, New South Wales, 2017",,-33.9076209,151.2067198,photon,
 Saké Restaurant & Bar,,,"Cross Street 33, Double Bay, Sydney, New South Wales, 2028",,-33.8762301,151.243382,photon,
+Suminoya Japanese Restaurant,,,"Hosking Place 1, Wynyard, Sydney, New South Wales, 2000",https://www.suminoya.com.au/,-33.8670545,151.209138,photon,
 Taipei Chef Restaurant,,,"Broughton Road, Artarmon, Sydney, New South Wales, 2064",,-33.8089103,151.1840102,photon,
 Tany's Japanese Restaurant,,,"Redfern Street, Redfern, Sydney, New South Wales, 2016",,-33.892833,151.205041,photon,
 Terrace Restaurant,,,"Art Gallery Road, Sydney, New South Wales, 2000",https://www.terraceonthedomain.com.au/restaurant-menu/,-33.8678635,151.2167854,photon,

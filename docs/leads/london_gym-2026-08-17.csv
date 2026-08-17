@@ -1,6 +1,5 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Gym Nation,02081177455,,"Druid Street 26, St Olave's Estate, Old Kent Road, London, England, SE1 2AG",https://www.gym-nation.co.uk/,51.5013747,-0.078627,photon,website
-GYMPODS Dalston,+442045473964,dalston@gympods.com,"Dalston Square, De Beauvoir Town, Dalston, London, England, E8 3FS",https://gympods.com/about/dalston,51.5457729,-0.0746673,photon,website
 Gym,,,"Neville Avenue, Coombe, London, England, KT3 4SN",,51.4147535,-0.2629427,photon,
 Gym,,,"Valley View Road, Troy Town, Rochester, England, ME1 3TF",,51.3704092,0.4978358,photon,
 Gym,,,"Mill End, Hambleden, England, RG9 3AN",,51.5630052,-0.880684,photon,
@@ -33,4 +32,5 @@ Gymnasium,,,"Wandsworth High Street, Wandsworth, London, England, SW18 1UJ",,51.
 Gymnasivm,,,"Stockwell Road, Stockwell Park, Brixton, London, England, SW9 0FQ",,51.4664276,-0.1167678,photon,
 Gymnastics Factory,,,"Old Portsmouth Road, Artington, Guildford, England, GU3 1LH",,51.2191575,-0.580191,photon,
 Gymnova,,,"Triumph Road, East Beckton District Centre, Beckton, London, England, E6 5LW",,51.5136768,0.0560639,photon,
+GYMPODS Dalston,,,"Dalston Square, De Beauvoir Town, Dalston, London, England, E8 3FS",https://gympods.com/about/dalston,51.5457729,-0.0746673,photon,
 GYMPODS Putney,,,"Upper Richmond Road 88, Putney, London, England, SW15 2DT",,51.4594047,-0.2102067,photon,

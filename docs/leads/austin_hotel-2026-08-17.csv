@@ -1,6 +1,5 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 1 Hotel Austin,+17374159800,,"Red River Street 96, Rainey Street Historic District, Austin, Texas, 78701",https://www.1hotels.com/austin,30.2609777,-97.7394349,photon,website
-Hotel ZaZa,+15125429292,,"Lavaca Street 400, Warehouse District, Austin, Texas, 78701",https://www.hotelzaza.com/austin/,30.2672886,-97.7462484,photon,website
 Aiden Austin City Hotel,,,"South Interstate Highway 35 2200, Austin, Texas, 78704",,30.235419,-97.7412715,photon,
 ARRIVE Hotel,,,"East 6th Street 1813, East Cesar Chavez, Austin, Texas, 78702",,30.2614669,-97.722875,photon,
 Austin Proper Hotel,,,"West 2nd Street 600, Seaholm, Austin, Texas, 78701",https://www.properhotel.com/austin/,30.2661348,-97.7501475,photon,
@@ -25,6 +24,7 @@ Hotel Trinity,,,"East 5th Street 311, Downtown, Austin, Texas, 78701",https://ww
 Hotel Valencia Riverwalk,,,"East Houston Street 150, Downtown, San Antonio, Texas, 78205",,29.4262496,-98.491714,photon,
 Hotel Van Zandt,,,"Davis Street 605, Rainey Street Historic District, Austin, Texas, 78701",,30.259907,-97.7390523,photon,
 Hotel Viata,,,"South Capital of Texas Highway 320, Austin, Texas, 78746",,30.3008316,-97.8293824,photon,
+Hotel ZaZa,,,"Lavaca Street 400, Warehouse District, Austin, Texas, 78701",https://www.hotelzaza.com/austin/,30.2672886,-97.7462484,photon,
 Kimber Modern Hotel,,,"The Circle 110, South River City, Austin, Texas, 78704",,30.2500375,-97.7483705,photon,
 Menger Hotel,,,"Alamo Plaza 204, Hemisfair, San Antonio, Texas, 78205",,29.4245914,-98.4864288,photon,
 Omni Austin Hotel Downtown,,,"Brazos Street 700, Downtown, Austin, Texas, 78701",https://www.omnihotels.com/hotels/austin-downtown,30.2687857,-97.7404038,photon,

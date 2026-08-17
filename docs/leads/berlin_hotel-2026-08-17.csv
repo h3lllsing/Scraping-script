@@ -1,11 +1,11 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Hotel Adelante,03020095060,hello@adelanteboutiquehotel.de,"Borsigstraße, Oranienburger Vorstadt, Mitte, Berlin, 10115",https://www.adelanteboutiquehotel.de/,52.5283989,13.3912518,photon,website
-Hotel Aquino,+4930284860,info@hotel-aquino.de,"Hannoversche Straße 5b, Charitéviertel, Mitte, Berlin, 10115",https://www.hotel-aquino.de/,52.5271029,13.3847288,photon,website
 Hotel Dietrich-Bonhoeffer-Haus,+4930284670,info@hotel-dietrich-bonhoeffer.de,"Ziegelstraße 30, Dorotheenstadt, Mitte, Berlin, 10117",https://www.hotel-dietrich-bonhoeffer.de/,52.5236245,13.3900616,photon,website
 Hotel 103,,,"Schönhauser Allee 103, Nordisches Viertel, Prenzlauer Berg, Berlin, 10439",,52.5530834,13.413911,photon,
 Hotel 38,,,"Oranienburger Straße 38, Oranienburger Vorstadt, Mitte, Berlin, 10117",https://www.hotel38.de,52.5254865,13.3915391,photon,
 Hotel 4 Youth,,,"Bernauer Straße 45, Brunnenviertel, Mitte, Berlin, 10435",,52.5396733,13.4019939,photon,
 Hotel Amano,,,"Auguststraße 43, Scheunenviertel, Mitte, Berlin, 10119",http://www.hotel-amano.com/,52.5282515,13.402856,photon,
+Hotel Aquino,,,"Hannoversche Straße 5b, Charitéviertel, Mitte, Berlin, 10115",https://www.hotel-aquino.de/,52.5271029,13.3847288,photon,
 Hotel Arrival,,,"Lietzenburger Straße 30, Fasanenkiez, Wilmersdorf, Berlin, 10789",,52.4998409,13.3343927,photon,
 Hotel artim,,,"Fuggerstraße 20, Nollendorfkiez, Schöneberg, Berlin, 10777",,52.4990579,13.3448471,photon,
 Hotel Augusta,,,"Fasanenstraße 22, Charlottenburg, Berlin, 10719",,52.5023055,13.3272088,photon,
@@ -18,7 +18,7 @@ Hotel Bristol Berlin,,,"Kurfürstendamm 27, Charlottenburg, Berlin, 10623",,52.5
 Hotel Casa Camper Berlin,,,"Weinmeisterstraße 1, Scheunenviertel, Mitte, Berlin, 10178",http://www.casacamper.com/berlin/,52.5257861,13.4040637,photon,
 Hotel Castell Berlin,,,"Wielandstraße 24, Charlottenburg, Berlin, 10707",,52.5001968,13.3147386,photon,
 Hotel Comenius,,,"Grünberger Straße 22, Richard-Sorge-Viertel, Friedrichshain, Berlin, 10243",,52.5124379,13.4505118,photon,
-Hotel de Rome,,sales@nicsell.com,"Behrenstraße 37, Friedrichswerder, Mitte, Berlin, 10117",http://www.hotelderome.de,52.5157914,13.3940671,photon,
+Hotel de Rome,,,"Behrenstraße 37, Friedrichswerder, Mitte, Berlin, 10117",http://www.hotelderome.de,52.5157914,13.3940671,photon,
 Hotel Delta,,,"Pohlstraße 58, Lützowviertel, Tiergarten, Berlin, 10785",,52.5011463,13.3628868,photon,
 Hotel Eden am Zoo,,,"Uhlandstraße 184, Charlottenburg, Berlin, 10623",,52.5041057,13.3257086,photon,
 Hotel garni Aaberna,,,"Wilhelmshavener Straße 37, Stephankiez, Moabit, Berlin, 10551",,52.5340287,13.3415699,photon,

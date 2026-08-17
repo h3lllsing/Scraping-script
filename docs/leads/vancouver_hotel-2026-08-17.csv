@@ -1,12 +1,10 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
-Ambassador Hotel,18665312600,,"Granville Street 1212, Granville, Downtown, Vancouver, British Columbia, V6Z 1M4",http://hotelambassador.ca/,49.2767389,-123.1262123,photon,website
 Best Western Premier Chateau Granville Hotel & Suites & Conference Centre,18006630575,res@chateaugranville.com,"Granville Street 1100, Granville, Downtown, Vancouver, British Columbia, V6Z 1L8",https://www.chateaugranville.com/,49.2776626,-123.1247284,photon,website
 Blu Hotel,6046206200,,"Robson Street 177, Yaletown, Downtown, Vancouver, British Columbia, V6B 1C2",https://hotelbluvancouver.com/,49.2781605,-123.114459,photon,website
 Georgian Court Hotel,18006631155,info@georgiancourt.com,"Beatty Street 773, Downtown, Vancouver, British Columbia, V6B 2M1",https://georgiancourthotelvancouver.com/,49.2780805,-123.113659,photon,website
 Grand Park Hotel & Suites,+16046699888,info@grandparkvancouver.com,"Drake Street 718, Yaletown, Downtown, Vancouver, British Columbia, V6Z 3B4",https://www.grandparkdowntownvancouver.com/,49.2761123,-123.1283603,photon,website
-Granville Island Hotel,+18006631840,reservations@granvilleislandhotel.com,"Johnston Street 1253, Granville Island, Fairview, Vancouver, British Columbia, V6H 3R9",https://www.granvilleislandhotel.com/,49.2694881,-123.131157,photon,website
 The Parker Hotel Vancouver,6046887678,sandy@executivehotels.net; info@executivehotels.net,"Howe Street 1379, Granville, Downtown, Vancouver, British Columbia, V6Z 2R5",https://www.executivehotels.net/vancouver-downtown-boutique-hotel/,49.2761381,-123.1302108,photon,website
-YWCA Hotel / Residence / Hotel Willo,18006631424,info@hotelwillo.com,"Beatty Street 733, Downtown, Vancouver, British Columbia, V6B 2M1",https://www.ywcavan.org/hotel,49.2783703,-123.1131003,photon,website
+Ambassador Hotel,,,"Granville Street 1212, Granville, Downtown, Vancouver, British Columbia, V6Z 1M4",http://hotelambassador.ca/,49.2767389,-123.1262123,photon,
 Atrium Hotel Vancouver,,,"East Hastings Street 2889, Hastings-Sunrise, Vancouver, British Columbia, V5K 2A1",,49.2813793,-123.0452068,photon,
 Auberge Hotel Vancouver,,,"West Hastings Street 837, Financial District, Downtown, Vancouver, British Columbia, V6C 1C8",,49.2865686,-123.115258,photon,
 Azur Legacy Collection Hotel,,,"West Pender Street 833, Financial District, Downtown, Vancouver, British Columbia, V6C 1L6",,49.285898,-123.1162193,photon,
@@ -20,6 +18,7 @@ English Bay Hotel,,,"Denman Street 1150, Lower Davie, West End, Vancouver, Briti
 Exchange Hotel Vancouver,,,"Howe Street 475, Downtown, Vancouver, British Columbia, V6C 2X1",,49.2856155,-123.115708,photon,
 Fairmont Hotel Vancouver,,,"West Georgia Street 900, Downtown, Vancouver, British Columbia, V6C 2W6",,49.2837697,-123.1209858,photon,
 Grand Union Hotel,,,"West Hastings Street 74, Chinatown, Downtown, Vancouver, British Columbia, V6B 0T6",,49.2816498,-123.1068466,photon,
+Granville Island Hotel,,,"Johnston Street 1253, Granville Island, Fairview, Vancouver, British Columbia, V6H 3R9",https://www.granvilleislandhotel.com/,49.2694881,-123.131157,photon,
 Greenbrier Hotel,,,"Robson Street 1393, Lower Robson, West End, Vancouver, British Columbia, V6E 1C6",,49.2880057,-123.1294615,photon,
 Hotel At The Waldorf,,,"East Hastings Street 1489, Grandview-Woodland, Vancouver, British Columbia, V5L 1N9",,49.2814894,-123.074332,photon,
 Hotel Belmont Vancouver,,,"Nelson Street 654, Granville, Downtown, Vancouver, British Columbia, V6B 6K4",,49.2789156,-123.1227879,photon,
@@ -49,3 +48,4 @@ Tropicana Suite Hotel,,,"Robson Street 1361, Lower Robson, West End, Vancouver, 
 Victorian Hotel,,,"Homer Street 514, Chinatown, Downtown, Vancouver, British Columbia, V6B 1T6",,49.2824064,-123.1121366,photon,
 Vogue Hotel,,,"Granville Street 1060, Granville, Downtown, Vancouver, British Columbia, V6Z 1L4",,49.2785224,-123.1238337,photon,
 Wedgewood Hotel & Spa,,,"Hornby Street 845, Granville, Downtown, Vancouver, British Columbia, V6Z 1T9",,49.2823665,-123.1227769,photon,
+YWCA Hotel / Residence / Hotel Willo,,,"Beatty Street 733, Downtown, Vancouver, British Columbia, V6B 2M1",https://www.ywcavan.org/hotel,49.2783703,-123.1131003,photon,

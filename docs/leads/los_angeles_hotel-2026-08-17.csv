@@ -1,7 +1,6 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 "Hotel Figueroa, Unbound Collection by Hyatt",8443152861,,"South Figueroa Street 939, Financial District, Downtown, Los Angeles, California, 90015",https://www.hotelfigueroa.com/,34.0455421,-118.2640709,photon,website
 Hotel Normandie,2133888138,,"South Normandie Avenue 605, Koreatown, Los Angeles, California, 90005",https://www.hotelnormandiela.com/,34.0633069,-118.3007249,photon,website
-"Hotel Per La, Autograph Collection",+12133580000,info@hotelperla.com,"South Olive Street 649, Jewelry District, Downtown, Los Angeles, California, 90014",https://www.hotelperla.com/,34.046847,-118.255517,photon,website
 Millennium Biltmore Hotel,+12136241011,,"South Grand Avenue 506, Jewelry District, Downtown, Los Angeles, California, 90071",https://www.millenniumhotels.com/en/los-angeles/millennium-biltmore-hotel-los-angeles/,34.0493043,-118.2535177,photon,website
 DoubleTree by Hilton Hotel Los Angeles Downtown,,,"South Los Angeles Street 120, Toy District, Downtown, Los Angeles, California, 90012",https://www.hilton.com/en/hotels/laxdtdt-doubletree-los-angeles-downtown/,34.0505025,-118.2427134,photon,
 Hollywood Historic Hotel,,,"Melrose Avenue 5162, Hollywood, Los Angeles, California, 90004",,34.0833399,-118.3130427,photon,
@@ -41,6 +40,7 @@ Hotel Maya - a DoubleTree by Hilton Hotel,,,"Queensway Drive 700, Long Beach, Ca
 Hotel MdR,,,"Maxella Avenue 13480, Mar Vista, Los Angeles, California, 90292",,33.9849337,-118.4413147,photon,
 Hotel Pacific Garden,,,"West 158th Street, Hermosillo, Gardena, California, 90247",,33.8877768,-118.3053045,photon,
 Hotel Pacific Manhattan Beach,,,"North Sepulveda Boulevard 850, East Manhattan Beach, Manhattan Beach, California, 90266",,33.8844156,-118.395673,photon,
+"Hotel Per La, Autograph Collection",,,"South Olive Street 649, Jewelry District, Downtown, Los Angeles, California, 90014",https://www.hotelperla.com/,34.046847,-118.255517,photon,
 Hotel Royal,,,"East Broadway 431, Long Beach, California, 90802",,33.7695211,-118.1868897,photon,
 Hotel Shangri-La,,,"Ocean Avenue 1301, Downtown Santa Monica, Santa Monica, California, 90401",,34.0154709,-118.4992163,photon,
 Hotel Solaire,,,"West 7th Street 1710, Westlake South, Westlake, Los Angeles, California, 90017",,34.0541621,-118.2730548,photon,

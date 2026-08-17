@@ -1,5 +1,4 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
-Grace Hotel,+61292726888,grace@gracehotel.com.au,"York Street 77, Wynyard, Sydney, New South Wales, 2000",https://gracehotel.com.au/,-33.8689862,151.2056755,photon,website
 The Fullerton Hotel,+610282231111,fsy.info@fullertonhotels.com,"Martin Place 1, Wynyard, Sydney, New South Wales, 2000",https://www.fullertonhotels.com/fullerton-hotel-sydney,-33.867868,151.2077229,photon,website
 Ace Hotel,,,"Wentworth Avenue 47-53, Surry Hills, Sydney, New South Wales, 2000",,-33.8788467,151.2099659,photon,
 ADGE Hotel,,,"Lower Campbell Street, Surry Hills, Sydney, New South Wales, 2010",,-33.880269,151.2139552,photon,
@@ -15,6 +14,7 @@ CB Hotel,,,"Pitt Street 403-427, Thai Town, Haymarket, Sydney, New South Wales, 
 Central Hotel,,,"Randle Lane, Strawberry Hills, Surry Hills, Sydney, New South Wales, 2010",,-33.8853176,151.2073172,photon,
 Central Private Hotel,,,"Elizabeth Street 358, Strawberry Hills, Surry Hills, Sydney, New South Wales, 2010",,-33.8849798,151.2083244,photon,
 DeVere Hotel,,,"Macleay Street 44-46, Elizabeth Bay, Sydney, New South Wales, 2011",,-33.8708575,151.2254334,photon,
+Grace Hotel,,,"York Street 77, Wynyard, Sydney, New South Wales, 2000",https://gracehotel.com.au/,-33.8689862,151.2056755,photon,
 Harbour Rocks Hotel,,,"Harrington Street 34, The Rocks, Sydney, New South Wales, 2000",,-33.8596478,151.2081434,photon,
 Harbour View Hotel,,,"Cumberland Street, Dawes Point, Sydney, New South Wales, 2000",,-33.8567424,151.207364,photon,
 Hotel 57,,,"Foveaux Street 57, Surry Hills, Sydney, New South Wales, 2010",,-33.8843847,151.2103139,photon,

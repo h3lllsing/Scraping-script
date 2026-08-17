@@ -1,6 +1,5 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Grand Canyon Restaurant,+17184993660,grandcanyonbh@gmail.com,"Montague Street 143, Brooklyn Heights, Brooklyn, New York, 11201",https://grandcr.com,40.6947302,-73.9936048,photon,website
-Sentir Vegan Mexican Restaurant,+12128713171,info@cityrootsnyc.com; info@sentirnyc.com,"West 19th Street 37, Chelsea District, Manhattan, New York, 10011",https://sentirnyc.com/,40.7400275,-73.9931732,photon,website
 ABA Turkish Restaurant,,,"West 57th Street 325, Columbus Circle, Manhattan, New York, 10019",,40.7674386,-73.9839741,photon,
 Aladdin Sweets and Restaurant,,,"36th Avenue 29-06, Queens, New York, 11106",,40.7571637,-73.931277,photon,
 Amami Bar Restaurant,,,"Nassau Avenue, Greenpoint, Brooklyn, New York, 11222",,40.7234589,-73.9520947,photon,
@@ -40,6 +39,7 @@ Restaurante Delicias Adonai,,,"Beach Channel Drive 14-91, Far Rockaway, Queens, 
 Restaurante Félix,,,"Grand Street, Little Italy, Manhattan, New York, 10013",,40.7225399,-74.0038369,photon,
 Retro Polish Restaurant and Wine Bar,,,"Manhattan Avenue 853, Greenpoint, Brooklyn, New York, 11222",,40.729096,-73.9539689,photon,
 Roundabout Restaurant,,,"4th Avenue 950, Greenwood Heights, Brooklyn, New York, 11232",,40.6545566,-74.0044827,photon,
+Sentir Vegan Mexican Restaurant,,,"West 19th Street 37, Chelsea District, Manhattan, New York, 10011",https://sentirnyc.com/,40.7400275,-73.9931732,photon,
 Soldier Restaurant,,,"Fulton Street 1444, Bedford-Stuyvesant, Brooklyn, New York, 11216",,40.6799265,-73.9430377,photon,
 Supreme Restaurant,,,"Mott Street 100, Chinatown, Manhattan, New York, 10012",,40.7172968,-73.9973195,photon,
 Sylvia's Restaurant,,,"Malcolm X Boulevard 328, Harlem, Manhattan, New York, 10027",,40.8086285,-73.9445189,photon,

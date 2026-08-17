@@ -1,6 +1,5 @@
 ﻿name,phone,email,address,website,latitude,longitude,source,phone_via
 Kimpton Clocktower Hotel,+441612881111,,"Oxford Street, Petersfield, City Centre, Manchester, England, M60 7HA",https://www.kimptonclocktowerhotel.com/,53.4743275,-2.24031,photon,website
-Leonardo Hotel Manchester Central,+441619538888,,"Great Bridgewater Street 56, Petersfield, City Centre, Manchester, England, M1 5LE",https://www.leonardohotels.co.uk/hotels/manchester,53.4747491,-2.2466906,photon,website
 New Union Hotel,01618700031,info@newunionhotel.co.uk,"Princess Street 111, Gay Village, City Centre, Manchester, England, M1 6JB",https://newunionhotel.co.uk/,53.4763829,-2.2383285,photon,website
 Britannia Country House Hotel,,,"Palatine Road, Northenden, Manchester, England, M20 2WG",,53.4161845,-2.2485046,photon,
 Buxton Crescent Hotel and Spa,,,"The Crescent, Fairfield, High Peak, England, SK17 6BH",,53.2588539,-1.9149896,photon,
@@ -30,6 +29,7 @@ Hotel St Pierre,,,"Barnsley Road 833, Crigglestone, Wakefield, England, WF2 6QG"
 Hotel Van Dyk,,,"Worksop Road, Whitwell, Bolsover, England, S43 4TB",,53.2886436,-1.2543392,photon,
 Ibis Hotel Manchester City Centre,,,"Portland Street 96, Chinatown, City Centre, Manchester, England, M1 4GX",,53.4773839,-2.2406635,photon,
 Ibis Styles - Manchester Portland Hotel,,,"Portland Street 3-5, Piccadilly, City Centre, Manchester, England, M1 6DP",,53.4802907,-2.2353564,photon,
+Leonardo Hotel Manchester Central,,,"Great Bridgewater Street 56, Petersfield, City Centre, Manchester, England, M1 5LE",https://www.leonardohotels.co.uk/hotels/manchester,53.4747491,-2.2466906,photon,
 Leonardo Hotel Manchester Piccadilly,,,"Epworth Street, Piccadilly, City Centre, Manchester, England, M4 7BT",,53.4788511,-2.2224487,photon,
 Leven Hotel,,,"Chorlton Street 40, Gay Village, City Centre, Manchester, England, M1 3HW",,53.4775275,-2.2363884,photon,
 Maldron Hotel Manchester City Centre,,,"Charles Street 60, Petersfield, City Centre, Manchester, England, M1 7DF",https://www.maldronhotelmanchestercitycentre.com/,53.473776,-2.2394321,photon,
