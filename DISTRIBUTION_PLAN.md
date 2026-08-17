@@ -31,22 +31,22 @@ Ranked by expected value per hour:
 - **Gumroad discovery** — title/tags matter: e.g. "Houston Dentist Leads —
   Business Contact List CSV". Free to list; low organic traffic but zero cost.
 
-## Sales tracker (copy into Google Sheets)
+## Sales tracker
 
-Columns:
+The tracker is `sales_tracker.csv` in this repo. Manage it with the included CLI
+(no need to edit the CSV by hand):
 
+```text
+python track_sales.py add --channel LinkedIn --contact "Bright Local Agency" \
+    --product "US Dentists mega-bundle" --price 49 --status paid \
+    --buyer-email jane@x.xyz --notes "wants NZ bundle too"
+python track_sales.py list      # show all entries
+python track_sales.py stats     # revenue + kill-criterion progress
 ```
-date | channel | contact | product | price | status | buyer_email | notes
-```
 
-`status`: lead → contacted → sample-sent → paid → bundle-upgrade
-
-Sample rows:
-
-```
-2026-08-20 | LinkedIn  | Bright Local Agency | free sample (Houston dentists) | 0   | sample-sent | jane@brightlocal.xyz | also wants NY bundle
-2026-08-21 | Reddit    | (DM from r/LeadGeneration) | US Restaurant bundle | 49 | paid        | x@gmail.com             | via product page
-```
+Columns: `date | channel | contact | product | price | status | buyer_email | notes`.
+`status`: lead → contacted → sample-sent → paid → bundle-upgrade.
+The CSV can also be imported into Google Sheets for a shared view.
 
 ## Weekly cadence (every Friday, 30 min)
 
