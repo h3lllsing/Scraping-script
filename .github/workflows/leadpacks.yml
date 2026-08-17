@@ -1,4 +1,4 @@
-name: Lead Packs
+name: Lead Packs (canary)
 
 on:
   schedule:
@@ -11,9 +11,6 @@ on:
       - "generate_leadpack.py"
       - "leadpacks.json"
 
-permissions:
-  contents: write
-
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -24,15 +21,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Generate lead packs
+      - name: Generate lead packs (canary — validates the live API + quality gate)
         run: python generate_leadpack.py --all
         env:
           LEADPACK_API: "https://scraping-script-xi.vercel.app"
 
-      - name: Commit lead packs
+      - name: Note
         run: |
-          git config user.name "h3lllsing"
-          git config user.email "h3lllsing@users.noreply.github.com"
-          git add docs/leads
-          git commit -m "chore: refresh lead packs $(date -u +%F)" || echo "no changes"
-          git push
+          echo "Packs are generated into the gitignored 'packs/' folder and are NOT committed."
+          echo "Paid packs stay private: generate locally weekly and upload ZIPs to Gumroad."
+          echo "See docs/leads/paid/README.md."

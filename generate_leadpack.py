@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 
 API_BASE = os.environ.get("LEADPACK_API", "https://scraping-script-xi.vercel.app")
-OUT_DIR = os.environ.get("LEADPACK_OUT", "docs/leads")
+OUT_DIR = os.environ.get("LEADPACK_OUT", "packs")
 DEFAULT_LIMIT = 50
 
 QUALITY_MIN_COUNT = int(os.environ.get("QUALITY_MIN_COUNT", "30"))

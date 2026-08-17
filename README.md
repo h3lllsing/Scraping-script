@@ -185,34 +185,37 @@ official API (e.g. Google Places / Foursquare) via a small custom source — the
 
 A `render.yaml` blueprint is included so you can also use **New → Blueprint**.
 
-## Automated lead packs (CSV, free cron)
+## Lead packs (CSV, private delivery)
 
-Sellable, ready-made CSV lead packs are auto-generated **every day at 03:00 UTC**
-by a free GitHub Actions cron (no card, no server cost). Each pack is a CSV of
-`name, phone, email, address, website, latitude, longitude, source` for a niche +
-city, sorted so records with a phone appear first. Packs are committed to
-`docs/leads/` so every CSV gets a permanent public URL:
+Sellable, quality-gated CSV lead packs are generated from the live API
+(`/scrape?enrich=true`). Each pack is a CSV of `name, phone, email, address,
+website, latitude, longitude, source` for a niche + city, sorted so records with
+a phone appear first.
+
+**Paid packs are never committed to this public repository** — only the free
+sample lives here, at a stable URL:
 
 ```text
-https://raw.githubusercontent.com/h3lllsing/Scraping-script/main/docs/leads/<city>_<query>-<YYYY-MM-DD>.csv
+https://raw.githubusercontent.com/h3lllsing/Scraping-script/main/docs/leads/free-sample/sample-pack.csv
 ```
+
+Paid packs are generated locally (output lands in the gitignored `packs/`
+folder) and delivered as **Gumroad file uploads** so buyers get them privately.
+See `docs/leads/paid/README.md`.
 
 - Edit `leadpacks.json` to change which niche × city packs to build. The default
   roster is 18 cities across US/UK/EU/CA/AU/NZ × 58 niche packs (restaurant,
   cafe, hotel, salon, dentist, gym) — chosen because OSM/Photon contact tags are
   far richer there than in South-Asian/Dubai cities. Every pack passes a
   **quality gate** before it is written: at least 30 rows AND (5% phone rate OR
-  2+ emails). Packs that fail are skipped and the previous day's CSV is kept, so
-  quality stays high even when a data source is flaky.
-- Trigger manually: GitHub → **Actions → Lead Packs → Run workflow**.
-- Run locally: `python generate_leadpack.py --query restaurant --location New York`
+  2+ emails). Packs that fail are skipped, so quality stays high even when a
+  data source is flaky.
+- Generate locally: `python generate_leadpack.py --query restaurant --location "New York"`
   (or `--all`). Set `LEADPACK_API` to point at any instance of this app. Gate
   thresholds are tunable via `QUALITY_MIN_COUNT`, `QUALITY_MIN_PHONE_PCT`,
   `QUALITY_MIN_EMAILS`.
-
-The workflow calls your live API's `/scrape?enrich=true` endpoint. Because the
-enrichment pass is already free, a pack that includes businesses with websites
-will contain phones too (`phone_via=website` column).
+- A daily 03:00 UTC GitHub Actions cron still runs as a **canary** — it
+  validates the live API + quality gate without publishing anything.
 
 ## Legal
 

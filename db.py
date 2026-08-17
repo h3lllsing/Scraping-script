@@ -105,6 +105,7 @@ def init_db():
                 "CREATE INDEX IF NOT EXISTS leads_query_loc ON leads (query, location)"
             )
             cur.execute("CREATE INDEX IF NOT EXISTS leads_captured ON leads (captured_at)")
+            cur.execute("DELETE FROM scrape_cache WHERE expires_at < now()")
             conn.commit()
     return True
 

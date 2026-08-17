@@ -50,8 +50,10 @@ The CSV can also be imported into Google Sheets for a shared view.
 
 ## Weekly cadence (every Friday, 30 min)
 
-1. GitHub → Actions → Lead Packs → Run workflow (fresh packs).
-2. Update the free-sample raw URL in Gumroad (see GUMROAD_LISTING.md).
+1. Generate packs locally: `python generate_leadpack.py --all --base https://<render-service>.onrender.com`
+   (gitignored `packs/` folder; nothing committed publicly).
+2. Zip the packs and upload to the matching Gumroad products (the free-sample
+   raw URL is stable: `docs/leads/free-sample/sample-pack.csv`).
 3. Send 5 LinkedIn messages + 5 Reddit/FB value-first comments.
 4. Update the tracker (statuses + new leads).
 5. Check sales against the kill criterion.
